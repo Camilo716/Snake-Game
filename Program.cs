@@ -10,6 +10,7 @@ public class SnakeGame
     public int snakeBodyVertical = 0;
     public string snakeHead = "@";
     public int score = 0;
+    public bool playerLose = false;
     public int heightOfMap; // Rows
     public int widthOfMap;  // Columns
     public string[,] map;
@@ -32,13 +33,14 @@ public class SnakeGame
         this.createInitialMap();
         this.writeMap();
 
-        while (true)
+        while (this.playerLose == false)
         {
             this.moveToDo = Console.ReadLine();
 
             nextMove();
-
+            
         }
+        finishGame();
     }
 
      public void createInitialMap()
@@ -119,12 +121,12 @@ public class SnakeGame
                 {
                     if (map[row,column] == map[1, column])
                     {
-                        finishGame(); 
+                        playerLose = true;
                         return;
                     }
                     else if (map[row-1,column] == "0")
                     {
-                        finishGame();
+                        playerLose = true;
                         return;
                     }
                     else if (map[row-1,column] == "." &&  map[row+1,column] != "0" && map[row,column+1] != "0") // When snake is going right
@@ -170,12 +172,12 @@ public class SnakeGame
                 {
                     if (map[row,column] == map[maxIndexRow-2, column])
                     {
-                        finishGame(); 
+                        playerLose = true;
                         return;
                     }
                     else if (map[row+1,column] == "0")
                     {
-                        finishGame();
+                        playerLose = true;
                         return;
                     }
                     else if (map[row+1,column] == "." &&  map[row-1,column] != "0" && map[row,column+1] != "0") // When snake is going right
@@ -220,12 +222,12 @@ public class SnakeGame
                 {
                     if (map[row,column] == map[row, maxIndexColumn-2]) 
                     {
-                        finishGame(); 
+                        playerLose = true;
                         return;
                     }
                     else if (map[row,column+1] == "0")
                     {
-                        finishGame(); 
+                        playerLose = true;
                         return;
                     }
                     else if (map[row,column+1] == "." && map[row,column-1] != "0" && map[row-1,column] != "0") // When snake is going up
@@ -257,21 +259,6 @@ public class SnakeGame
                         map[row, column-snakeBodyHorizontal] = ".";
                         return;
                     }
-
-                    // if (map[row,column +1] == "#" && map[row,column +1] != "0" )
-                    // {
-                    //     map[row,column +1] = snakeHead;
-                    //     map[row,column] = "0";
-                    //     snakeBodyHorizontal +=1;
-                    //     break;
-                    // }
-                    // if (map[row,column +1] == "#" && map[row,column +1] == "0" )
-                    // {
-                    //     map[row,column +1] = snakeHead;
-                    //     map[row,column] = "0";
-                    //     snakeBodyHorizontal +=1;
-                    //     break;
-                    // }
                 }
             }
         }
@@ -286,12 +273,12 @@ public class SnakeGame
                 {
                     if (map[row,column] == map[row,1])
                     {
-                        finishGame(); 
+                        playerLose = true; 
                         return;
                     }
                     else if (map[row,column-1] == "0")
                     {
-                        finishGame(); 
+                        playerLose = true;
                         return;
                     }
                     else if (map[row,column-1] == "." && map[row,column+1] != "0" && map[row-1,column] != "0") // When snake is going up
