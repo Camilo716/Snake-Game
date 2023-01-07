@@ -1,6 +1,7 @@
 global using NUnit.Framework;
 
-SnakeGame game = new SnakeGame(20, 40);
+// SnakeGame game = new SnakeGame(20, 40);
+SnakeGame game = new SnakeGame(5, 8);
 
 game.playGame();
 
@@ -330,7 +331,7 @@ public class SnakeGame
 
     public void finishGame()
     {
-        Console.WriteLine($"-------------\nYOU CRASHED!\nScore: {score} \n-------------");
+        Console.WriteLine($"-------------\nYOU CRASHED!\nScore: {score}\n-------------");
     }
 
 }

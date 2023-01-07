@@ -12,15 +12,18 @@ public class Tests
     {
         using (var ConsoleOutput = new ConsoleOutput())
         {
-        SnakeGame game = new SnakeGame(3, 5);
+        SnakeGame game = new SnakeGame(5, 8);
 
-        // 0****
-        // **#**
-        // *****
+        // ________
+        // |......|
+        // |0@.#..|
+        // |......|
+        // ________
 
         game.createInitialMap();
 
-        Assert.AreEqual("#", game.map[1,2]);
+        //Assert.AreEqual("#", game.map[2,4]);
+        Assert.That("#", Is.EqualTo(game.map[2, 4]));
         }
     }
 
@@ -29,16 +32,18 @@ public class Tests
     {
         using (var ConsoleOutput = new ConsoleOutput())
         {
-        SnakeGame game = new SnakeGame(3, 5);
+        SnakeGame game = new SnakeGame(5, 8);
 
         game.createInitialMap();
         game.writeMap();
 
-        string mapExpected = "\n\n\n*****\n0@#**\n*****\n";
-        // *****
-        // 0@#**
-        // *****
-        Assert.AreEqual(mapExpected, ConsoleOutput.GetOuput());
+        string mapExpected = "\n\n\n\n\n________\n|......|\n|0@.#..|\n|......|\n________\n";
+        // ________
+        // |......|
+        // |0@.#..|
+        // |......|
+        // ________
+        Assert.That(ConsoleOutput.GetOuput(), Is.EqualTo(mapExpected));
         }
     }
 
@@ -47,18 +52,20 @@ public class Tests
     {
         using (var ConsoleOutput = new ConsoleOutput())
         {
-        SnakeGame game = new SnakeGame(4, 7);
+        SnakeGame game = new SnakeGame(5, 8);
 
         game.createInitialMap();
         game.moveRight();
         game.writeMap();
         
-        string mapExpected = "\n\n\n\n*******\n*******\n*0@#***\n*******\n";
-        // *******
-        // *******
-        // *0@#***
-        // *******
-        Assert.AreEqual(mapExpected, ConsoleOutput.GetOuput());
+        string mapExpected = "\n\n\n\n\n________\n|......|\n|.0@#..|\n|......|\n________\n";
+        // ________
+        // |......|
+        // |.0@#..|
+        // |......|
+        // ________
+
+        Assert.That(ConsoleOutput.GetOuput(), Is.EqualTo(mapExpected));
         }
     }
     [Test]
@@ -66,18 +73,19 @@ public class Tests
     {
         using (var ConsoleOutput = new ConsoleOutput())
         {
-        SnakeGame game = new SnakeGame(4, 7);
+        SnakeGame game = new SnakeGame(5, 8);
 
         game.createInitialMap();
         game.moveUp();
         game.writeMap();
         
-        string mapExpected = "\n\n\n\n*******\n*@*****\n*0*#***\n*******\n";
-        // *******
-        // *@*****
-        // *0*#***
-        // *******
-        Assert.AreEqual(mapExpected, ConsoleOutput.GetOuput());
+        string mapExpected = "\n\n\n\n\n________\n|.@....|\n|.0.#..|\n|......|\n________\n";
+        // ________
+        // |.@....|
+        // |.0.#..|
+        // |......|
+        // ________
+        Assert.That(ConsoleOutput.GetOuput(), Is.EqualTo(mapExpected));
         }
     }
 
@@ -91,7 +99,9 @@ public class Tests
 
         game.finishGame();
 
-        Assert.AreEqual("YOU CRASHED!\nScore: 0\n", ConsoleOutput.GetOuput());
+        string finishMessage = "-------------\nYOU CRASHED!\nScore: 0\n-------------\n";
+
+        Assert.That(ConsoleOutput.GetOuput(), Is.EqualTo(finishMessage)); 
         }
     }
 }
