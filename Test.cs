@@ -12,7 +12,7 @@ public class Tests
     {
         using (var ConsoleOutput = new ConsoleOutput())
         {
-        SnakeGame game = new SnakeGame(5, 8);
+        SnakeGame game = aSnakeGame(5, 8);
 
         // ________
         // |......|
@@ -32,7 +32,7 @@ public class Tests
     {
         using (var ConsoleOutput = new ConsoleOutput())
         {
-        SnakeGame game = new SnakeGame(5, 8);
+        SnakeGame game = aSnakeGame(5, 8);
 
         game.createInitialMap();
         game.writeMap();
@@ -52,7 +52,7 @@ public class Tests
     {
         using (var ConsoleOutput = new ConsoleOutput())
         {
-        SnakeGame game = new SnakeGame(5, 8);
+        SnakeGame game = aSnakeGame(5, 8);
 
         game.createInitialMap();
         game.moveRight();
@@ -73,7 +73,7 @@ public class Tests
     {
         using (var ConsoleOutput = new ConsoleOutput())
         {
-        SnakeGame game = new SnakeGame(5, 8);
+        SnakeGame game = aSnakeGame(5, 8);
 
         game.createInitialMap();
         game.moveUp();
@@ -95,7 +95,7 @@ public class Tests
     {
         using (var ConsoleOutput = new ConsoleOutput())
         {
-        SnakeGame game = new SnakeGame(3, 5);
+        SnakeGame game = aSnakeGame(3, 5);
 
 
         game.finishGame();
@@ -108,5 +108,14 @@ public class Tests
 
         Assert.That(ConsoleOutput.GetOuput(), Is.EqualTo(finishMessage)); 
         }
+    }
+
+
+    private SnakeGame aSnakeGame(int heightOfMap, int widthOfMap)
+    {
+        var math = new SnakeMath();
+        var g = new SnakeGame(heightOfMap, widthOfMap, math);
+
+        return g;
     }
 }

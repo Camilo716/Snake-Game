@@ -1,7 +1,8 @@
 global using NUnit.Framework;
 
 // SnakeGame game = new SnakeGame(20, 40);
-SnakeGame game = new SnakeGame(5, 8);
+SnakeMath math = new SnakeMath();
+SnakeGame game = new SnakeGame(5, 8, math);
 
 game.playGame();
 
@@ -18,15 +19,16 @@ public class SnakeGame
     public string moveToDo;
     public int maxIndexRow;
     public int maxIndexColumn;
-    
+    private SnakeMath _math;
 
-    public SnakeGame(int heightOfMap, int widthOfMap)
+    public SnakeGame(int heightOfMap, int widthOfMap, SnakeMath math)
     {
         this.heightOfMap = heightOfMap;
         this.widthOfMap = widthOfMap;
         this.map = new string[heightOfMap,widthOfMap];
         this.maxIndexRow = this.map.GetLength(0);
         this.maxIndexColumn = this.map.GetLength(1);
+        _math = math;
     }
 
     public void playGame()
@@ -50,12 +52,12 @@ public class SnakeGame
         {
             for (int column = 0; column < maxIndexColumn; column++)
             {
-                if (row == Math.Floor(Convert.ToDecimal(maxIndexRow/2)) && column == 2)
+                if (row == _math.Round(maxIndexRow/2) && column == 2)
                 {
                     this.map[row,column] = snakeHead;
                     this.map[row, column-1] = "0";
                 }
-                else if (row == Math.Floor(Convert.ToDecimal(maxIndexRow/2)) && column == Math.Floor(Convert.ToDecimal(maxIndexColumn/2)) )
+                else if (row == _math.Round(maxIndexRow/2) && column == _math.Round(maxIndexColumn/2) )
                 {
                     this.map[row,column] = "#";
                 }
