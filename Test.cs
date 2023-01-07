@@ -37,12 +37,12 @@ public class Tests
         game.createInitialMap();
         game.writeMap();
 
-        string mapExpected = "\n\n\n\n\n________\n|......|\n|0@.#..|\n|......|\n________\n";
-        // ________
-        // |......|
-        // |0@.#..|
-        // |......|
-        // ________
+        string mapExpected = "\n\n\n\n\n"+
+            "________\n"+
+            "|......|\n"+
+            "|0@.#..|\n"+
+            "|......|\n"+
+            "________\n";
         Assert.That(ConsoleOutput.GetOuput(), Is.EqualTo(mapExpected));
         }
     }
@@ -58,12 +58,12 @@ public class Tests
         game.moveRight();
         game.writeMap();
         
-        string mapExpected = "\n\n\n\n\n________\n|......|\n|.0@#..|\n|......|\n________\n";
-        // ________
-        // |......|
-        // |.0@#..|
-        // |......|
-        // ________
+        string mapExpected = "\n\n\n\n\n"+
+        "________\n"+
+        "|......|\n"+
+        "|.0@#..|\n"+
+        "|......|\n"+
+        "________\n";
 
         Assert.That(ConsoleOutput.GetOuput(), Is.EqualTo(mapExpected));
         }
@@ -79,12 +79,13 @@ public class Tests
         game.moveUp();
         game.writeMap();
         
-        string mapExpected = "\n\n\n\n\n________\n|.@....|\n|.0.#..|\n|......|\n________\n";
-        // ________
-        // |.@....|
-        // |.0.#..|
-        // |......|
-        // ________
+        string mapExpected = "\n\n\n\n\n"+
+        "________\n"+
+        "|.@....|\n"+
+        "|.0.#..|\n"+
+        "|......|\n"+
+        "________\n";
+
         Assert.That(ConsoleOutput.GetOuput(), Is.EqualTo(mapExpected));
         }
     }
@@ -99,7 +100,11 @@ public class Tests
 
         game.finishGame();
 
-        string finishMessage = "-------------\nYOU CRASHED!\nScore: 0\n-------------\n";
+        string finishMessage = 
+        "-------------\n"+
+        "YOU CRASHED!\n"+
+        "Score: 0\n"+
+        "-------------\n";
 
         Assert.That(ConsoleOutput.GetOuput(), Is.EqualTo(finishMessage)); 
         }
