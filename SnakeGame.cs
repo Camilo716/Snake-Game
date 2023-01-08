@@ -1,9 +1,17 @@
 public class SnakeGame
 {
+    // Counters
     public int snakeBodyHorizontalCounter = 1;
     public int snakeBodyVerticalCounter = 0;
-    public string snakeHead = "@";
     public int score = 0;
+    // Entities
+    public string snakeHead = "@";
+    public string snakeBody = "0";
+    public string backgroundMap = ".";
+    public string fruit = "#";
+    public string horizontalBorder = "_";
+    public string verticalBorder = "|";
+    // Game controlers
     public bool playerLose = false;
     public int heightOfMap; // Rows
     public int widthOfMap;  // Columns
@@ -11,6 +19,7 @@ public class SnakeGame
     public string moveToDo;
     public int maxIndexRow;
     public int maxIndexColumn;
+    // Dependences
     private SnakeMath _math;
     private SnakeUI _userInterface;
 
@@ -45,25 +54,31 @@ public class SnakeGame
         {
             for (int column = 0; column < maxIndexColumn; column++)
             {
-                if (row == _math.Round(maxIndexRow/2) && column == 2)
+                // The loop is in:
+                bool place_to_create_snake = row == _math.Round(maxIndexRow/2) && column == 2;
+                bool middle_of_map           = row == _math.Round(maxIndexRow/2) && column == _math.Round(maxIndexColumn/2);
+                bool vertical_border_of_map  = row == 0 || row == maxIndexRow-1;
+                bool horizonal_border_of_map = column == 0 || column == maxIndexColumn-1; 
+
+                if (place_to_create_snake)
                 {
                     this.map[row,column] = snakeHead;
-                    this.map[row, column-1] = "0";
+                    this.map[row, column-1] = snakeBody;
                 }
-                else if (row == _math.Round(maxIndexRow/2) && column == _math.Round(maxIndexColumn/2) )
+                else if (middle_of_map)
                 {
-                    this.map[row,column] = "#";
+                    this.map[row,column] = fruit;
                 }
-                else if (row == 0 || row == maxIndexRow-1)
+                else if (vertical_border_of_map)
                 {
-                    this.map[row,column] = "_";
+                    this.map[row,column] = horizontalBorder;
                 }
-                else if (column == 0 || column == maxIndexColumn-1)
+                else if (horizonal_border_of_map)
                 {
-                    this.map[row,column] = "|";
+                    this.map[row,column] = verticalBorder;
                 }
                 else{
-                    this.map[row,column] = ".";
+                    this.map[row,column] = backgroundMap;
                 }
             }
         }
@@ -114,42 +129,47 @@ public class SnakeGame
             {
                 if (map[row,column] == snakeHead)
                 {
-                    if (map[row,column] == map[1, column])
+                    bool player_crashed_with_borders   = map[row,column] == map[1, column];
+                    bool player_crashed_with_snakebody = map[row-1,column] == snakeBody;
+                    bool snake_is_going_to_the_right   = map[row-1,column] == backgroundMap &&  map[row+1,column] != snakeBody && map[row,column+1] != snakeBody;
+                    bool snake_is_going_to_the_left    = map[row-1,column] == backgroundMap &&  map[row+1,column] != snakeBody && map[row,column-1] != snakeBody;
+                    bool snake_is_going_up             = map[row-1,column] == backgroundMap && map[row+1, column] == snakeBody;
+
+                    if (player_crashed_with_borders)
                     {
                         playerLose = true;
                         return;
                     }
-                    else if (map[row-1,column] == "0")
+                    else if (player_crashed_with_snakebody)
                     {
                         playerLose = true;
                         return;
                     }
-                    else if (map[row-1,column] == "." &&  map[row+1,column] != "0" && map[row,column+1] != "0") // When snake is going right
+                    else if (snake_is_going_to_the_right)
                     {
                         map[row-1,column] = snakeHead;
-                        map[row,column] = "0";
-                        map[row,column-snakeBodyHorizontalCounter] = ".";
+                        map[row,column] = snakeBody;
+                        map[row,column-snakeBodyHorizontalCounter] = backgroundMap;
 
                         this.snakeBodyVerticalCounter+=1;
                         this.snakeBodyHorizontalCounter-=1;
                         return;
                     }
-                    else if (map[row-1,column] == "." &&  map[row+1,column] != "0" && map[row,column-1] != "0") // When snake is going left
+                    else if (snake_is_going_to_the_left)
                     {
                         map[row-1,column] = snakeHead;
-                        map[row,column] = "0";
-                        map[row,column+snakeBodyHorizontalCounter] = ".";
+                        map[row,column] = snakeBody;
+                        map[row,column+snakeBodyHorizontalCounter] = backgroundMap;
 
                         this.snakeBodyVerticalCounter+=1;
                         this.snakeBodyHorizontalCounter-=1;
                         return;
                     }
-                    else if (map[row-1,column] == "." && map[row+1, column] == "0") // When snake is going up
+                    else if (snake_is_going_up)
                     {
-                       
                         map[row-1,column] = snakeHead;
-                        map[row,column] = "0";
-                        map[row+snakeBodyVerticalCounter, column] = ".";
+                        map[row,column] = snakeBody;
+                        map[row+snakeBodyVerticalCounter, column] = backgroundMap;
                         return;
                     }                  
                 }
@@ -165,41 +185,47 @@ public class SnakeGame
             {
                 if (map[row,column] == snakeHead)
                 {
-                    if (map[row,column] == map[maxIndexRow-2, column])
+                    bool player_crashed_with_borders   = map[row,column] == map[maxIndexRow-2, column];
+                    bool player_crashed_with_snakebody = map[row+1,column] == snakeBody;
+                    bool snake_is_going_to_the_right   = map[row+1,column] == backgroundMap &&  map[row-1,column] != snakeBody && map[row,column+1] != snakeBody;
+                    bool snake_is_going_to_the_left    = map[row+1,column] == backgroundMap &&  map[row-1,column] != snakeBody && map[row,column-1] != snakeBody;
+                    bool snake_is_going_down           = map[row+1,column] == backgroundMap && map[row-1, column] == snakeBody;
+
+                    if (player_crashed_with_borders)
                     {
                         playerLose = true;
                         return;
                     }
-                    else if (map[row+1,column] == "0")
+                    else if (player_crashed_with_snakebody)
                     {
                         playerLose = true;
                         return;
                     }
-                    else if (map[row+1,column] == "." &&  map[row-1,column] != "0" && map[row,column+1] != "0") // When snake is going right
+                    else if (snake_is_going_to_the_right)
                     {
                         map[row+1,column] = snakeHead;
-                        map[row,column] = "0";
-                        map[row,column-snakeBodyHorizontalCounter] = ".";
+                        map[row,column] = snakeBody;
+                        map[row,column-snakeBodyHorizontalCounter] = backgroundMap;
 
                         this.snakeBodyVerticalCounter+=1;
                         this.snakeBodyHorizontalCounter-=1;
                         return;
                     }
-                    else if (map[row+1,column] == "." &&  map[row-1,column] != "0" && map[row,column-1] != "0") // When snake is going left
+                    else if (snake_is_going_to_the_left)
                     {
                         map[row+1,column] = snakeHead;
-                        map[row,column] = "0";
-                        map[row,column+snakeBodyHorizontalCounter] = ".";
+                        map[row,column] = snakeBody;
+                        map[row,column+snakeBodyHorizontalCounter] = backgroundMap;
 
                         this.snakeBodyVerticalCounter+=1;
                         this.snakeBodyHorizontalCounter-=1;
                         return;
                     }
-                    else if (map[row+1,column] == "." && map[row-1, column] == "0") // When snake is going down
+                    else if (snake_is_going_down)
                     {
                         map[row+1,column] = snakeHead;
-                        map[row,column] = "0";
-                        map[row-snakeBodyVerticalCounter, column] = ".";                                               
+                        map[row,column] = snakeBody;
+                        map[row-snakeBodyVerticalCounter, column] = backgroundMap;                                               
                         return;
                     }        
                 }
@@ -215,43 +241,48 @@ public class SnakeGame
             {
                 if (map[row,column] == snakeHead)
                 {
-                    if (map[row,column] == map[row, maxIndexColumn-2]) 
+                    bool player_crashed_with_borders   = map[row,column] == map[row, maxIndexColumn-2];
+                    bool player_crashed_with_snakebody = map[row,column+1] == snakeBody;
+                    bool snake_is_going_up             = map[row,column+1] == backgroundMap && map[row,column-1] != snakeBody && map[row-1,column] != snakeBody;
+                    bool snake_is_going_down           = map[row,column+1] == backgroundMap && map[row,column-1] != snakeBody && map[row+1,column] != snakeBody;
+                    bool snake_is_going_to_the_right   = map[row,column+1] == backgroundMap && map[row,column-1] == snakeBody;
+
+                    if (player_crashed_with_borders) 
                     {
                         playerLose = true;
                         return;
                     }
-                    else if (map[row,column+1] == "0")
+                    else if (player_crashed_with_snakebody)
                     {
                         playerLose = true;
                         return;
                     }
-                    else if (map[row,column+1] == "." && map[row,column-1] != "0" && map[row-1,column] != "0") // When snake is going up
+                    else if (snake_is_going_up)
                     {
                         map[row,column+1] = snakeHead;
-                        map[row,column] = "0";
-                        
-                        map[row+snakeBodyVerticalCounter, column] = ".";
+                        map[row,column] = snakeBody;
+                        map[row+snakeBodyVerticalCounter, column] = backgroundMap;
 
                         this.snakeBodyVerticalCounter-=1;
                         this.snakeBodyHorizontalCounter+=1;
                         return;
                     }
-                    else if (map[row,column+1] == "." && map[row,column-1] != "0" && map[row+1,column] != "0") // When snake is going down
+                    else if (snake_is_going_down)
                     {
                         map[row,column+1] = snakeHead;
-                        map[row,column] = "0";
+                        map[row,column] = snakeBody;
                         
-                        map[row-snakeBodyVerticalCounter, column] = ".";
+                        map[row-snakeBodyVerticalCounter, column] = backgroundMap;
 
                         this.snakeBodyVerticalCounter-=1;
                         this.snakeBodyHorizontalCounter+=1;
                         return;
                     }
-                    else if (map[row,column+1] == "." && map[row,column-1] == "0") // When snake is going right
+                    else if (snake_is_going_to_the_right)
                     {
                         map[row,column+1] = snakeHead;
-                        map[row,column] = "0";
-                        map[row, column-snakeBodyHorizontalCounter] = ".";
+                        map[row,column] = snakeBody;
+                        map[row, column-snakeBodyHorizontalCounter] = backgroundMap;
                         return;
                     }
                 }
@@ -266,41 +297,47 @@ public class SnakeGame
             {
                 if (map[row,column] == snakeHead)
                 {
-                    if (map[row,column] == map[row,1])
+                    bool player_crashed_with_borders   = map[row,column] == map[row,1];
+                    bool player_crashed_with_snakebody = map[row,column-1] == snakeBody;
+                    bool snake_is_going_up             = map[row,column-1] == backgroundMap && map[row,column+1] != snakeBody && map[row-1,column] != snakeBody;
+                    bool snake_is_going_down           = map[row,column-1] == backgroundMap && map[row,column+1] != snakeBody && map[row+1,column] != snakeBody;
+                    bool snake_is_going_to_the_left    = map[row,column-1] == backgroundMap && map[row,column+1] == snakeBody;
+
+                    if (player_crashed_with_borders)
                     {
                         playerLose = true; 
                         return;
                     }
-                    else if (map[row,column-1] == "0")
+                    else if (player_crashed_with_snakebody)
                     {
                         playerLose = true;
                         return;
                     }
-                    else if (map[row,column-1] == "." && map[row,column+1] != "0" && map[row-1,column] != "0") // When snake is going up
+                    else if (snake_is_going_up)
                     {
                         map[row,column-1] = snakeHead;
-                        map[row,column] = "0";
-                        map[row+snakeBodyVerticalCounter, column] = ".";
+                        map[row,column] = snakeBody;
+                        map[row+snakeBodyVerticalCounter, column] = backgroundMap;
 
                         this.snakeBodyVerticalCounter-=1;
                         this.snakeBodyHorizontalCounter+=1;
                         return;
                     }
-                    else if (map[row,column-1] == "." && map[row,column+1] != "0" && map[row+1,column] != "0") // When snake is going down
+                    else if (snake_is_going_down)
                     {
                         map[row,column-1] = snakeHead;
-                        map[row,column] = "0";
-                        map[row-snakeBodyVerticalCounter, column] = ".";
+                        map[row,column] = snakeBody;
+                        map[row-snakeBodyVerticalCounter, column] = backgroundMap;
 
                         this.snakeBodyVerticalCounter-=1;
                         this.snakeBodyHorizontalCounter+=1;
                         return;
                     }
-                    else if (map[row,column-1] == "." && map[row,column+1] == "0") // When snake is going left
+                    else if (snake_is_going_to_the_left)
                     {
                         map[row,column-1] = snakeHead;
-                        map[row,column] = "0";
-                        map[row, column+snakeBodyHorizontalCounter] = ".";
+                        map[row,column] = snakeBody;
+                        map[row, column+snakeBodyHorizontalCounter] = backgroundMap;
                         return;
                     }
                 }
