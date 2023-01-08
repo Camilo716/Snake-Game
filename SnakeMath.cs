@@ -1,6 +1,3 @@
-
-
-
 public class SnakeMath
 {
     public int Round(float val)
@@ -8,3 +5,5 @@ public class SnakeMath
         return Convert.ToInt32(Math.Floor(val));
     }
 }
+
+

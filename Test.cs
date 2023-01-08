@@ -37,7 +37,7 @@ public class Tests
         game.createInitialMap();
         game.writeMap();
 
-        string mapExpected = "\n\n\n\n\n"+
+        string mapExpected =
             "________\n"+
             "|......|\n"+
             "|0@.#..|\n"+
@@ -58,7 +58,7 @@ public class Tests
         game.moveRight();
         game.writeMap();
         
-        string mapExpected = "\n\n\n\n\n"+
+        string mapExpected =
         "________\n"+
         "|......|\n"+
         "|.0@#..|\n"+
@@ -79,7 +79,7 @@ public class Tests
         game.moveUp();
         game.writeMap();
         
-        string mapExpected = "\n\n\n\n\n"+
+        string mapExpected =
         "________\n"+
         "|.@....|\n"+
         "|.0.#..|\n"+
@@ -114,8 +114,9 @@ public class Tests
     private SnakeGame aSnakeGame(int heightOfMap, int widthOfMap)
     {
         var math = new SnakeMath();
-        var g = new SnakeGame(heightOfMap, widthOfMap, math);
+        var userInterface = new SnakeUI();
+        var game = new SnakeGame(heightOfMap, widthOfMap, math, userInterface);
 
-        return g;
+        return game;
     }
 }
