@@ -16,7 +16,7 @@ public class SnakeGame
     public int heightOfMap; // Rows
     public int widthOfMap;  // Columns
     public string[,] map;
-    public string moveToDo;
+    public string? moveToDo;
     public int maxIndexRow;
     public int maxIndexColumn;
     // Dependences

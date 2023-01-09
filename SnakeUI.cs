@@ -12,7 +12,11 @@ public class SnakeUI
 
     public string readNextMove()
     {
-        string nextMove = Console.ReadLine();
-        return nextMove;
+        string? nextMove = Console.ReadLine();
+        if (nextMove != null)
+        {
+            return nextMove;
+        }
+        return "";
     }
 }
