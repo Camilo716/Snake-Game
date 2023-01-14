@@ -1,4 +1,4 @@
-namespace casnake;
+namespace casnake.Tests;
 
 public class Tests
 {
@@ -114,7 +114,7 @@ public class Tests
     private SnakeGame aSnakeGame(int heightOfMap, int widthOfMap)
     {
         var math = new SnakeMath();
-        var userInterface = new SnakeUI();
+        var userInterface = new SnakeUIConsole();
         var game = new SnakeGame(heightOfMap, widthOfMap, math, userInterface);
 
         return game;

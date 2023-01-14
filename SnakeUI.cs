@@ -1,4 +1,11 @@
-public class SnakeUI
+public interface SnakeUI
+{
+    public void writeCharInGame(string charToWrite);
+    public void writeMessage(string message);
+    public string readNextMove();
+}
+
+public class SnakeUIConsole : SnakeUI
 {
     public void writeCharInGame(string charToWrite)
     {
