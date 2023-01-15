@@ -16,7 +16,6 @@ public class SnakeGame
     public int heightOfMap; // Rows
     public int widthOfMap;  // Columns
     public string[,] map;
-    public string? moveToDo;
     public int maxIndexRow;
     public int maxIndexColumn;
     // Dependences
@@ -41,14 +40,14 @@ public class SnakeGame
 
         while (this.playerLose == false)
         {
-            this.moveToDo = _userInterface.readNextMove();
-            nextMove();
+            string moveToDo = _userInterface.readNextMove();
+            nextMove(moveToDo);
         }
         
         finishGame();
     }
 
-     public void createInitialMap()
+    public void createInitialMap()
     {
         for (int row = 0; row < maxIndexRow; row++)
         {
@@ -84,9 +83,9 @@ public class SnakeGame
         }
     }
 
-    public void nextMove()
+    public void nextMove(string moveToDo)
     {
-        switch (this.moveToDo)
+        switch (moveToDo)
         {
             case "w":
                 moveUp();
