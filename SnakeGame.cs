@@ -3,7 +3,13 @@ public class SnakeGame
     // Counters
     private int snakeBodyHorizontalCounter = 1;
     private int snakeBodyVerticalCounter = 0;
-    private int score = 0;
+    private int score = 1;
+    //Trackers
+    private int headTracker_r;
+    private int headTracker_c;
+    private int tailTracker_r;
+    private int tailTracker_c;
+    private string tailDirection;
     // Entities
     private string snakeHead = "@";
     private string snakeBody = "0";
@@ -53,15 +59,20 @@ public class SnakeGame
             for (int column = 0; column < maxIndexColumn; column++)
             {
                 // The loop is in:
-                bool place_to_create_snake = row == _math.Round(maxIndexRow/2) && column == 2;
-                bool middle_of_map = row == _math.Round(maxIndexRow/2) && column == _math.Round(maxIndexColumn/2);
+                bool place_to_create_snake = row == _math.round(maxIndexRow/2) && column == 2;
+                bool middle_of_map = row == _math.round(maxIndexRow/2) && column == _math.round(maxIndexColumn/2);
                 bool vertical_border_of_map = row == 0 || row == maxIndexRow-1;
-                bool horizonal_border_of_map = column == 0 || column == maxIndexColumn-1; 
+                bool horizonal_border_of_map = column == 0 || column == maxIndexColumn-1;
 
                 if (place_to_create_snake)
                 {
                     this.map[row,column] = snakeHead;
                     this.map[row, column-1] = snakeBody;
+
+                    headTracker_c = column;
+                    headTracker_r = row;
+                    tailTracker_r = row;
+                    tailTracker_c = column-1;
                 }
                 else if (middle_of_map)
                 {
@@ -80,9 +91,10 @@ public class SnakeGame
                 }
             }
         }
+        tailDirection = "rigth";
     }
 
-    public void nextMove(string moveToDo)
+    private void nextMove(string moveToDo)
     {
         switch (moveToDo)
         {
@@ -121,229 +133,204 @@ public class SnakeGame
 
     public void moveUp()
     {
-        for (int row = 0; row < maxIndexRow; row++)
+        bool playerCrashed = headTracker_c == 1 || map[headTracker_r-1, headTracker_c] == snakeBody;
+        bool aheadThereIsAFruit = map[headTracker_r-1, headTracker_c] == fruit;
+
+        if (playerCrashed)
         {
-            for (int column = 0; column < maxIndexColumn; column++)
-            {
-                if (map[row,column] == snakeHead)
-                {
-                    bool player_crashed_with_borders = map[row,column] == map[1, column];
-                    bool player_crashed_with_snakebody = map[row-1,column] == snakeBody;
-                    bool snake_is_going_to_the_right = map[row-1,column] == backgroundMap &&  map[row+1,column] != snakeBody && map[row,column+1] != snakeBody;
-                    bool snake_is_going_to_the_left = map[row-1,column] == backgroundMap &&  map[row+1,column] != snakeBody && map[row,column-1] != snakeBody;
-                    bool snake_is_going_up = map[row-1,column] == backgroundMap && map[row+1, column] == snakeBody;
+            playerLose = true;
+            return;
+        }
+        if (aheadThereIsAFruit)
+        {
+            map[headTracker_r, headTracker_c] = snakeBody;
+            map[headTracker_r-1, headTracker_c] = snakeHead;
 
-                    if (player_crashed_with_borders)
-                    {
-                        playerLose = true;
-                        return;
-                    }
-                    else if (player_crashed_with_snakebody)
-                    {
-                        playerLose = true;
-                        return;
-                    }
-                    else if (snake_is_going_to_the_right)
-                    {
-                        map[row-1,column] = snakeHead;
-                        map[row,column] = snakeBody;
-                        map[row,column-snakeBodyHorizontalCounter] = backgroundMap;
+            trackHeadSnake(headTracker_r-1, headTracker_c);
+            generateFruit();
+        }
+        else
+        {
+            map[tailTracker_r, tailTracker_c] = backgroundMap;
+            map[headTracker_r, headTracker_c] = snakeBody;
+            map[headTracker_r-1, headTracker_c] = snakeHead;
 
-                        this.snakeBodyVerticalCounter+=1;
-                        this.snakeBodyHorizontalCounter-=1;
-                        return;
-                    }
-                    else if (snake_is_going_to_the_left)
-                    {
-                        map[row-1,column] = snakeHead;
-                        map[row,column] = snakeBody;
-                        map[row,column+snakeBodyHorizontalCounter] = backgroundMap;
-
-                        this.snakeBodyVerticalCounter+=1;
-                        this.snakeBodyHorizontalCounter-=1;
-                        return;
-                    }
-                    else if (snake_is_going_up)
-                    {
-                        map[row-1,column] = snakeHead;
-                        map[row,column] = snakeBody;
-                        map[row+snakeBodyVerticalCounter, column] = backgroundMap;
-                        return;
-                    }                  
-                }
-            }
+            trackHeadSnake(headTracker_r-1, headTracker_c);
+            trackTailSnake();        
         }
     }
 
     public void moveDown()
     {
-        for (int row = 0; row < maxIndexRow; row++)
+        bool playerCrashed = headTracker_r == maxIndexRow-2 || map[headTracker_r+1, headTracker_c] == snakeBody;
+        bool aheadThereIsAFruit = map[headTracker_r+1, headTracker_c] == fruit;
+
+        if (playerCrashed)
         {
-            for (int column = 0; column < maxIndexColumn; column++)
-            {
-                if (map[row,column] == snakeHead)
-                {
-                    bool player_crashed_with_borders   = map[row,column] == map[maxIndexRow-2, column];
-                    bool player_crashed_with_snakebody = map[row+1,column] == snakeBody;
-                    bool snake_is_going_to_the_right   = map[row+1,column] == backgroundMap &&  map[row-1,column] != snakeBody && map[row,column+1] != snakeBody;
-                    bool snake_is_going_to_the_left    = map[row+1,column] == backgroundMap &&  map[row-1,column] != snakeBody && map[row,column-1] != snakeBody;
-                    bool snake_is_going_down           = map[row+1,column] == backgroundMap && map[row-1, column] == snakeBody;
-
-                    if (player_crashed_with_borders)
-                    {
-                        playerLose = true;
-                        return;
-                    }
-                    else if (player_crashed_with_snakebody)
-                    {
-                        playerLose = true;
-                        return;
-                    }
-                    else if (snake_is_going_to_the_right)
-                    {
-                        map[row+1,column] = snakeHead;
-                        map[row,column] = snakeBody;
-                        map[row,column-snakeBodyHorizontalCounter] = backgroundMap;
-
-                        this.snakeBodyVerticalCounter+=1;
-                        this.snakeBodyHorizontalCounter-=1;
-                        return;
-                    }
-                    else if (snake_is_going_to_the_left)
-                    {
-                        map[row+1,column] = snakeHead;
-                        map[row,column] = snakeBody;
-                        map[row,column+snakeBodyHorizontalCounter] = backgroundMap;
-
-                        this.snakeBodyVerticalCounter+=1;
-                        this.snakeBodyHorizontalCounter-=1;
-                        return;
-                    }
-                    else if (snake_is_going_down)
-                    {
-                        map[row+1,column] = snakeHead;
-                        map[row,column] = snakeBody;
-                        map[row-snakeBodyVerticalCounter, column] = backgroundMap;                                               
-                        return;
-                    }        
-                }
-            }
+            playerLose = true;
+            return;
         }
+        if (aheadThereIsAFruit)
+        {
+            map[headTracker_r, headTracker_c] = snakeBody;
+            map[headTracker_r+1, headTracker_c] = snakeHead;
+
+            trackHeadSnake(headTracker_r+1, headTracker_c);
+            generateFruit();
+        }
+        else
+        {
+            map[tailTracker_r, tailTracker_c] = backgroundMap;
+            map[headTracker_r, headTracker_c] = snakeBody;
+            map[headTracker_r+1, headTracker_c] = snakeHead;
+
+            trackHeadSnake(headTracker_r+1, headTracker_c);
+            trackTailSnake();            
+        }
+
     }
         
     public void moveRight()
     {
-        for (int row = 0; row < maxIndexRow; row++)
+        bool playerCrashed = headTracker_c == maxIndexColumn-2 || map[headTracker_r, headTracker_c+1] == snakeBody;
+        bool aheadThereIsAFruit = map[headTracker_r, headTracker_c+1] == fruit;
+
+
+        if (playerCrashed)
         {
-            for (int column = 0; column < maxIndexColumn; column++)
-            {
-                if (map[row,column] == snakeHead)
-                {
-                    bool player_crashed_with_borders   = map[row,column] == map[row, maxIndexColumn-2];
-                    bool player_crashed_with_snakebody = map[row,column+1] == snakeBody;
-                    bool snake_is_going_up             = map[row,column+1] == backgroundMap && map[row,column-1] != snakeBody && map[row-1,column] != snakeBody;
-                    bool snake_is_going_down           = map[row,column+1] == backgroundMap && map[row,column-1] != snakeBody && map[row+1,column] != snakeBody;
-                    bool snake_is_going_to_the_right   = map[row,column+1] == backgroundMap && map[row,column-1] == snakeBody;
+            playerLose = true;
+            return;
+        }
 
-                    if (player_crashed_with_borders) 
-                    {
-                        playerLose = true;
-                        return;
-                    }
-                    else if (player_crashed_with_snakebody)
-                    {
-                        playerLose = true;
-                        return;
-                    }
-                    else if (snake_is_going_up)
-                    {
-                        map[row,column+1] = snakeHead;
-                        map[row,column] = snakeBody;
-                        map[row+snakeBodyVerticalCounter, column] = backgroundMap;
+        if (aheadThereIsAFruit)
+        {
+            map[headTracker_r, headTracker_c] = snakeBody;
+            map[headTracker_r, headTracker_c+1] = snakeHead;
 
-                        this.snakeBodyVerticalCounter-=1;
-                        this.snakeBodyHorizontalCounter+=1;
-                        return;
-                    }
-                    else if (snake_is_going_down)
-                    {
-                        map[row,column+1] = snakeHead;
-                        map[row,column] = snakeBody;
-                        
-                        map[row-snakeBodyVerticalCounter, column] = backgroundMap;
+            trackHeadSnake(headTracker_r, headTracker_c+1);
+            generateFruit();
+        }
+        else
+        {
+            map[tailTracker_r, tailTracker_c] = backgroundMap;
+            map[headTracker_r, headTracker_c] = snakeBody;
+            map[headTracker_r, headTracker_c+1] = snakeHead;
 
-                        this.snakeBodyVerticalCounter-=1;
-                        this.snakeBodyHorizontalCounter+=1;
-                        return;
-                    }
-                    else if (snake_is_going_to_the_right)
-                    {
-                        map[row,column+1] = snakeHead;
-                        map[row,column] = snakeBody;
-                        map[row, column-snakeBodyHorizontalCounter] = backgroundMap;
-                        return;
-                    }
-                }
-            }
+            trackHeadSnake(headTracker_r, headTracker_c+1);
+            trackTailSnake();
         }
     }
+
     public void moveLeft()
     {
-        for (int row = 0; row < maxIndexRow; row++)
+        bool playerCrashed = headTracker_c == 1|| map[headTracker_r, headTracker_c-1] == snakeBody;
+        bool aheadThereIsAFruit = map[headTracker_r, headTracker_c-1] == fruit;
+
+        if (playerCrashed)
         {
-            for (int column = 0; column < maxIndexColumn; column++)
-            {
-                if (map[row,column] == snakeHead)
-                {
-                    bool player_crashed_with_borders   = map[row,column] == map[row,1];
-                    bool player_crashed_with_snakebody = map[row,column-1] == snakeBody;
-                    bool snake_is_going_up             = map[row,column-1] == backgroundMap && map[row,column+1] != snakeBody && map[row-1,column] != snakeBody;
-                    bool snake_is_going_down           = map[row,column-1] == backgroundMap && map[row,column+1] != snakeBody && map[row+1,column] != snakeBody;
-                    bool snake_is_going_to_the_left    = map[row,column-1] == backgroundMap && map[row,column+1] == snakeBody;
+            playerLose = true;
+            return;
+        }
 
-                    if (player_crashed_with_borders)
-                    {
-                        playerLose = true; 
-                        return;
-                    }
-                    else if (player_crashed_with_snakebody)
-                    {
-                        playerLose = true;
-                        return;
-                    }
-                    else if (snake_is_going_up)
-                    {
-                        map[row,column-1] = snakeHead;
-                        map[row,column] = snakeBody;
-                        map[row+snakeBodyVerticalCounter, column] = backgroundMap;
+        if (aheadThereIsAFruit)
+        {
+            map[headTracker_r, headTracker_c] = snakeBody;
+            map[headTracker_r, headTracker_c-1] = snakeHead;
 
-                        this.snakeBodyVerticalCounter-=1;
-                        this.snakeBodyHorizontalCounter+=1;
-                        return;
-                    }
-                    else if (snake_is_going_down)
-                    {
-                        map[row,column-1] = snakeHead;
-                        map[row,column] = snakeBody;
-                        map[row-snakeBodyVerticalCounter, column] = backgroundMap;
+            trackHeadSnake(headTracker_r, headTracker_c-1);
+            generateFruit();
+        }
+        else
+        {
+            map[tailTracker_r, tailTracker_c] = backgroundMap;
+            map[headTracker_r, headTracker_c] = snakeBody;
+            map[headTracker_r, headTracker_c-1] = snakeHead;
 
-                        this.snakeBodyVerticalCounter-=1;
-                        this.snakeBodyHorizontalCounter+=1;
-                        return;
-                    }
-                    else if (snake_is_going_to_the_left)
-                    {
-                        map[row,column-1] = snakeHead;
-                        map[row,column] = snakeBody;
-                        map[row, column+snakeBodyHorizontalCounter] = backgroundMap;
-                        return;
-                    }
-                }
-            }
+            trackHeadSnake(headTracker_r, headTracker_c-1);
+            trackTailSnake();
         }
     }
 
-    public void finishGame()
+    private void trackHeadSnake(int headRow, int headColumn)
+    {
+        headTracker_r = headRow;
+        headTracker_c = headColumn;
+    }
+
+    private void trackTailSnake()
+    {
+        verificateTailDirection();
+
+        switch (tailDirection)
+        {
+            case "up":
+                tailTracker_r = tailTracker_r-1;
+                break;
+
+            case "down":
+                tailTracker_r = tailTracker_r+1;
+                break;
+
+            case "right":
+                tailTracker_c = tailTracker_c+1;
+                break;
+
+            case "left":
+                tailTracker_c = tailTracker_c-1;
+                break;     
+
+            default:
+                break;
+       }
+    }
+
+    private void verificateTailDirection()
+    {
+        string upToTail = map[tailTracker_r-1,tailTracker_c];
+        string downToTail = map[tailTracker_r+1,tailTracker_c];
+        string rightToTail = map[tailTracker_r,tailTracker_c+1];
+        string leftToTail = map[tailTracker_r,tailTracker_c-1];
+        
+        if (upToTail == snakeBody)
+        {
+            tailDirection = "up";
+        }
+        if (downToTail == snakeBody)
+        {
+            tailDirection = "down";
+        }    
+        if (rightToTail == snakeBody)
+        {
+            tailDirection = "right";
+        }
+        if (leftToTail == snakeBody)
+        {
+            tailDirection =  "left";
+        }
+    }
+
+    private void generateFruit()
+    {
+
+        while (true)
+        {
+            int rowNewFruit = _math.randomNumberForRow(maxIndexRow);
+            int columnNewFruit = _math.randomNumberForColumn(maxIndexColumn);
+
+            bool placeWithoutAnotherEntities = map[rowNewFruit, columnNewFruit] == " ";
+
+
+            if (placeWithoutAnotherEntities)
+            {
+                map[rowNewFruit, columnNewFruit] = fruit;
+                break;
+            }
+        }
+
+        score +=1;
+        
+    }
+    private void finishGame()
     {
         _userInterface.writeMessage($"-------------\nYOU CRASHED!\nScore: {score}\n-------------");
     }
