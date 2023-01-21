@@ -1,6 +1,7 @@
 # SNAKE GAME
+Practice proposed by my mentor @bit4bit
 
-Program which try to replies the logic and interactions of famous snake game
+Program which replies the logic and interactions of famous snake game
 
 ## Moves
 - Move up:  w
