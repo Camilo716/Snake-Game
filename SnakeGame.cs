@@ -1,23 +1,22 @@
 public class SnakeGame
 {
     // Counters
-    public int snakeBodyHorizontalCounter = 1;
-    public int snakeBodyVerticalCounter = 0;
-    public int score = 0;
+    private int snakeBodyHorizontalCounter = 1;
+    private int snakeBodyVerticalCounter = 0;
+    private int score = 0;
     // Entities
-    public string snakeHead = "@";
-    public string snakeBody = "0";
-    public string backgroundMap = ".";
-    public string fruit = "#";
-    public string horizontalBorder = "_";
-    public string verticalBorder = "|";
+    private string snakeHead = "@";
+    private string snakeBody = "0";
+    private string backgroundMap = " ";
+    private string fruit = "#";
+    private string borderOfMap = "*";
     // Game controlers
-    public bool playerLose = false;
+    private bool playerLose = false;
     public int heightOfMap; // Rows
     public int widthOfMap;  // Columns
     public string[,] map;
-    public int maxIndexRow;
-    public int maxIndexColumn;
+    private int maxIndexRow;
+    private int maxIndexColumn;
     // Dependences
     private SnakeMath _math;
     private SnakeUI _userInterface;
@@ -55,8 +54,8 @@ public class SnakeGame
             {
                 // The loop is in:
                 bool place_to_create_snake = row == _math.Round(maxIndexRow/2) && column == 2;
-                bool middle_of_map           = row == _math.Round(maxIndexRow/2) && column == _math.Round(maxIndexColumn/2);
-                bool vertical_border_of_map  = row == 0 || row == maxIndexRow-1;
+                bool middle_of_map = row == _math.Round(maxIndexRow/2) && column == _math.Round(maxIndexColumn/2);
+                bool vertical_border_of_map = row == 0 || row == maxIndexRow-1;
                 bool horizonal_border_of_map = column == 0 || column == maxIndexColumn-1; 
 
                 if (place_to_create_snake)
@@ -70,11 +69,11 @@ public class SnakeGame
                 }
                 else if (vertical_border_of_map)
                 {
-                    this.map[row,column] = horizontalBorder;
+                    this.map[row,column] = borderOfMap;
                 }
                 else if (horizonal_border_of_map)
                 {
-                    this.map[row,column] = verticalBorder;
+                    this.map[row,column] = borderOfMap;
                 }
                 else{
                     this.map[row,column] = backgroundMap;
@@ -128,11 +127,11 @@ public class SnakeGame
             {
                 if (map[row,column] == snakeHead)
                 {
-                    bool player_crashed_with_borders   = map[row,column] == map[1, column];
+                    bool player_crashed_with_borders = map[row,column] == map[1, column];
                     bool player_crashed_with_snakebody = map[row-1,column] == snakeBody;
-                    bool snake_is_going_to_the_right   = map[row-1,column] == backgroundMap &&  map[row+1,column] != snakeBody && map[row,column+1] != snakeBody;
-                    bool snake_is_going_to_the_left    = map[row-1,column] == backgroundMap &&  map[row+1,column] != snakeBody && map[row,column-1] != snakeBody;
-                    bool snake_is_going_up             = map[row-1,column] == backgroundMap && map[row+1, column] == snakeBody;
+                    bool snake_is_going_to_the_right = map[row-1,column] == backgroundMap &&  map[row+1,column] != snakeBody && map[row,column+1] != snakeBody;
+                    bool snake_is_going_to_the_left = map[row-1,column] == backgroundMap &&  map[row+1,column] != snakeBody && map[row,column-1] != snakeBody;
+                    bool snake_is_going_up = map[row-1,column] == backgroundMap && map[row+1, column] == snakeBody;
 
                     if (player_crashed_with_borders)
                     {

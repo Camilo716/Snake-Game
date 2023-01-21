@@ -12,15 +12,16 @@ public class Tests
     {
         SnakeGame game = CreateSnakeGame(5, 8);
 
-        // ________
-        // |......|
-        // |0@.#..|
-        // |......|
-        // ________
+        // ********
+        // *      *
+        // *0@ #  *
+        // *      *
+        // ********
 
         game.createInitialMap();
 
         Assert.That("#", Is.EqualTo(game.map[2, 4]));
+        Assert.That("@", Is.EqualTo(game.map[2,2]));
     }
 
     [Test]
@@ -33,11 +34,11 @@ public class Tests
         game.moveUp();        
         
         string mapExpected =
-            "________\n"+
-            "|.@....|\n"+
-            "|.0.#..|\n"+
-            "|......|\n"+
-            "________\n";
+            "********\n"+
+            "* @    *\n"+
+            "* 0 #  *\n"+
+            "*      *\n"+
+            "********\n";
         Assert.That(UIStub.viewMap(game.map) , Is.EqualTo(mapExpected));
     }
 
@@ -51,11 +52,11 @@ public class Tests
         game.moveDown();        
         
         string mapExpected =
-            "________\n"+
-            "|......|\n"+
-            "|.0.#..|\n"+
-            "|.@....|\n"+
-            "________\n";
+            "********\n"+
+            "*      *\n"+
+            "* 0 #  *\n"+
+            "* @    *\n"+
+            "********\n";
         Assert.That(UIStub.viewMap(game.map) , Is.EqualTo(mapExpected));
     }
 
@@ -69,11 +70,11 @@ public class Tests
         game.moveRight();
 
         string mapExpected =
-            "________\n"+
-            "|......|\n"+
-            "|.0@#..|\n"+
-            "|......|\n"+
-            "________\n";
+            "********\n"+
+            "*      *\n"+
+            "* 0@#  *\n"+
+            "*      *\n"+
+            "********\n";
         Assert.That(UIStub.viewMap(game.map), Is.EqualTo(mapExpected));
 
     }
@@ -89,11 +90,11 @@ public class Tests
         game.moveLeft();
 
         string mapExpected =
-            "________\n"+
-            "|@0....|\n"+
-            "|...#..|\n"+
-            "|......|\n"+
-            "________\n";
+            "********\n"+
+            "*@0    *\n"+
+            "*   #  *\n"+
+            "*      *\n"+
+            "********\n";
         Assert.That(UIStub.viewMap(game.map), Is.EqualTo(mapExpected));
 
     }
