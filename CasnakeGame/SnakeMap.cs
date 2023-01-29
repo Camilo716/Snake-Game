@@ -1,4 +1,5 @@
-namespace casnake;
+namespace casnake.Game;
+
 public class SnakeMap
 {
     public string[,] map;

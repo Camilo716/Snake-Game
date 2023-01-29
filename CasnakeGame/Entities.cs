@@ -1,4 +1,4 @@
-namespace casnake;
+namespace casnake.Game;
 
 public class Entities
 {

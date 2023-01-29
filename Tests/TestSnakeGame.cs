@@ -1,4 +1,5 @@
 namespace casnake.Tests;
+using casnake.Game;
 
 public class Tests
 {
