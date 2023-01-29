@@ -8,38 +8,22 @@ public class Tests
     }
 
     [Test]
-    public void validate_creation_of_initial_map()
-    {
-        SnakeGame game = CreateSnakeGame(5, 8);
-
-        // ********
-        // *      *
-        // *0@ #  *
-        // *      *
-        // ********
-
-        game.createInitialMap();
-
-        Assert.That("#", Is.EqualTo(game.map[2, 4]));
-        Assert.That("@", Is.EqualTo(game.map[2,2]));
-    }
-
-    [Test]
     public void validate_move_up()
     {
         SnakeGame game = CreateSnakeGame(5, 8);
         SnakeUIStub UIStub = CreateSnakeUIStub();
-
-        game.createInitialMap();
-        game.moveUp();        
         
+        game._snakeMap.createInitialMap();
+        game._tracker.trackSnakeForInitialMap(game._snakeMap.map, game._entities.snakeHead);
+        game.moveUp();        
+
         string mapExpected =
             "********\n"+
             "* @    *\n"+
             "* 0 #  *\n"+
             "*      *\n"+
             "********\n";
-        Assert.That(UIStub.viewMap(game.map) , Is.EqualTo(mapExpected));
+        Assert.That(UIStub.drawGame(game._snakeMap.map) , Is.EqualTo(mapExpected));
     }
 
     [Test]
@@ -48,7 +32,8 @@ public class Tests
         SnakeGame game = CreateSnakeGame(5, 8);
         SnakeUIStub UIStub = CreateSnakeUIStub();
 
-        game.createInitialMap();
+        game._snakeMap.createInitialMap();
+        game._tracker.trackSnakeForInitialMap(game._snakeMap.map, game._entities.snakeHead);
         game.moveDown();        
         
         string mapExpected =
@@ -57,7 +42,7 @@ public class Tests
             "* 0 #  *\n"+
             "* @    *\n"+
             "********\n";
-        Assert.That(UIStub.viewMap(game.map) , Is.EqualTo(mapExpected));
+        Assert.That(UIStub.drawGame(game._snakeMap.map), Is.EqualTo(mapExpected));
     }
 
     [Test]
@@ -66,7 +51,8 @@ public class Tests
         SnakeGame game = CreateSnakeGame(5, 8);
         SnakeUIStub UIStub = CreateSnakeUIStub();
 
-        game.createInitialMap();
+        game._snakeMap.createInitialMap();
+        game._tracker.trackSnakeForInitialMap(game._snakeMap.map, game._entities.snakeHead);
         game.moveRight();
 
         string mapExpected =
@@ -75,8 +61,7 @@ public class Tests
             "* 0@#  *\n"+
             "*      *\n"+
             "********\n";
-        Assert.That(UIStub.viewMap(game.map), Is.EqualTo(mapExpected));
-
+        Assert.That(UIStub.drawGame(game._snakeMap.map), Is.EqualTo(mapExpected));
     }
 
     [Test]
@@ -85,7 +70,8 @@ public class Tests
         SnakeGame game = CreateSnakeGame(5, 8);
         SnakeUIStub UIStub = CreateSnakeUIStub();
 
-        game.createInitialMap();
+        game._snakeMap.createInitialMap();
+        game._tracker.trackSnakeForInitialMap(game._snakeMap.map, game._entities.snakeHead);
         game.moveUp();
         game.moveLeft();
 
@@ -95,16 +81,16 @@ public class Tests
             "*   #  *\n"+
             "*      *\n"+
             "********\n";
-        Assert.That(UIStub.viewMap(game.map), Is.EqualTo(mapExpected));
+        Assert.That(UIStub.drawGame(game._snakeMap.map), Is.EqualTo(mapExpected));
 
     }
-
-
-    private SnakeGame CreateSnakeGame(int heightOfMap, int widthOfMap)
+    
+    private SnakeGame CreateSnakeGame(int heightOfMap , int widthOfMap)
     {
-        var math = new SnakeMath();
-        var userInterface = new SnakeUIConsole();
-        var game = new SnakeGame(heightOfMap, widthOfMap, math, userInterface);
+        SnakeUIStub userInterface = new SnakeUIStub();
+        SnakeMap SMap = new SnakeMap(heightOfMap, widthOfMap);
+
+        var game = new SnakeGame(userInterface, SMap);
 
         return game;
     }

@@ -1,12 +1,7 @@
 namespace casnake.Tests;
 
-public class SnakeUIStub : SnakeUI
+public class SnakeUIStub : ISnakeUI
 {
-    public void writeCharInGame(string charToWrite)
-    {
-        Console.Write(charToWrite);
-    }
-
     public void writeMessage(string message)
     {
         Console.WriteLine(message);
@@ -22,7 +17,7 @@ public class SnakeUIStub : SnakeUI
         return "";
     }
     
-    public string viewMap(string[,] map)
+    public string drawGame(string[,] map)
     {
         string actualMap = "";
 
@@ -30,10 +25,8 @@ public class SnakeUIStub : SnakeUI
         {
             for (int column = 0; column < map.GetLength(1); column++)
             {
-                //_userInterface.writeCharInGame(map[row,column]);
                 actualMap += map[row,column];
             }
-            //_userInterface.writeCharInGame("\n");
             actualMap += "\n";
         }
         return actualMap;
