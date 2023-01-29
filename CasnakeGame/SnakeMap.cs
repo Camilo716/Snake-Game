@@ -7,6 +7,7 @@ public class SnakeMap
     private int widthOfMap;  // Columns
     private int maxIndexRow;
     private int maxIndexColumn;
+    private string? ceilAhead;
     public Entities _entities;
     private SnakeMath _math;
 
@@ -71,5 +72,49 @@ public class SnakeMap
                 break;
             }
         }
+    }
+
+    public string whatIsAhead(string direction, int row,int column)
+    {
+        ceilAhead = setCeilAhead(direction,row,column);
+
+        if (ceilAhead == _entities.borderOfMap || ceilAhead == _entities.snakeBody)
+        {
+            return "collition";
+        }
+        if (ceilAhead == _entities.backgroundMap)
+        {
+            return "backgroundMap";
+        }
+        else if (ceilAhead == _entities.fruit)
+        {
+            return "fruit";       
+        }
+        else if (ceilAhead == _entities.snakeBody)
+        {
+            return "body";
+        }
+        return "";
+    }
+
+    public string setCeilAhead(string direction, int row, int column)
+    {
+        switch (direction)
+        {
+            case "w":
+                return map[row-1,column];
+
+            case "s":
+                return map[row+1,column];
+
+            case "d":
+                return map[row,column+1];
+
+            case "a":
+                return map[row,column-1];     
+
+            default:
+                return "";
+       }   
     }
 }

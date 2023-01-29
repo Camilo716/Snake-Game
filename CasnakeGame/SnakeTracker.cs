@@ -2,35 +2,36 @@ namespace casnake.Game;
 
 public class SnakeTracker
 {
-    public int headTracker_row;
-    public int headTracker_column;
-    public int tailTracker_row;
-    public int tailTracker_column;
+    public int headTrackerY;
+    public int headTrackerX;
+    public int tailTrackerY;
+    public int tailTrackerX;
     
     public void trackHeadSnake(int headRow, int headColumn)
     {
-        headTracker_row = headRow;
-        headTracker_column = headColumn;
+        headTrackerY = headRow;
+        headTrackerX = headColumn;
     }
+
 
     public void trackTailSnake(string tailDirection)
     {
         switch (tailDirection)
         {
             case "up":
-                tailTracker_row = tailTracker_row-1;
+                tailTrackerY = tailTrackerY-1;
                 break;
 
             case "down":
-                tailTracker_row = tailTracker_row+1;
+                tailTrackerY = tailTrackerY+1;
                 break;
 
             case "right":
-                tailTracker_column = tailTracker_column+1;
+                tailTrackerX = tailTrackerX+1;
                 break;
 
             case "left":
-                tailTracker_column = tailTracker_column-1;
+                tailTrackerX = tailTrackerX-1;
                 break;     
 
             default:
@@ -47,16 +48,17 @@ public class SnakeTracker
                 if (map[row,column] == head)
                 {
                     trackHeadSnake(row,column);
-                    tailTracker_row = row;
-                    tailTracker_column = column-1;
+                    tailTrackerY = row;
+                    tailTrackerX = column-1;
                 }
             }
         }
     }
 
 
-    public string controlTrack()
+    public string controlTrack(string tileDirection)
     {
-        return $"Head:\t{headTracker_row}, {headTracker_column}\nTail:\t{tailTracker_row}, {tailTracker_column}";
+        return $"Head:\t{headTrackerY}, {headTrackerX}\nTail:\t{tailTrackerY}, {tailTrackerX} {tileDirection}";
+        
     }
 }

@@ -4,11 +4,12 @@ public class SnakeGame
 {
     private string tailDirection = "right";
     private int score = 1;
-    private bool playerLose = false;
+    private string moveToDo;
     private ISnakeUI _userInterface;
     public SnakeMap _snakeMap;
     public Entities _entities;
     public SnakeTracker _tracker;
+    
 
     public SnakeGame(ISnakeUI _userInterface, SnakeMap _snakeMap)
     {
@@ -22,14 +23,17 @@ public class SnakeGame
     {
         startGame();
 
-        while (playerLose == false)
+        while (true)
         {
-            string moveToDo = _userInterface.readNextMove();
-            nextMove(moveToDo);
-            _userInterface.writeMessage(_tracker.controlTrack());
-        }
-        
-        finishGame();
+            moveToDo = _userInterface.readNextMove();
+            if (verificateIfPlayerCrashed(moveToDo))
+            {
+                finishGame();
+                return;
+            }
+            nextMove();
+            _userInterface.writeMessage(_tracker.controlTrack(tailDirection));
+        }  
     }
 
     private void startGame()
@@ -37,10 +41,26 @@ public class SnakeGame
         _snakeMap.createInitialMap();
         _userInterface.drawGame(_snakeMap.map);
         _tracker.trackSnakeForInitialMap(_snakeMap.map, _entities.snakeHead);
-        _userInterface.writeMessage(_tracker.controlTrack());
+        _userInterface.writeMessage(_tracker.controlTrack(tailDirection));
     }
 
-    private void nextMove(string moveToDo)
+    public bool verificateIfPlayerCrashed(string direction)
+    {
+        bool playerCrashed = _snakeMap.whatIsAhead(direction, _tracker.headTrackerY, _tracker.headTrackerX) == "collition";
+
+        if (playerCrashed)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    private void finishGame()
+    {
+        _userInterface.writeMessage($"-------------\nYOU CRASHED!\nScore: {score}\n-------------");
+    }
+
+    private void nextMove()
     {
         switch (moveToDo)
         {
@@ -67,111 +87,82 @@ public class SnakeGame
 
     public void moveUp()
     {
-        bool playerCrashed = _tracker.headTracker_row == 1 || _snakeMap.map[_tracker.headTracker_row-1, _tracker.headTracker_column] == _entities.snakeBody;
-        bool aheadThereIsAFruit = _snakeMap.map[_tracker.headTracker_row-1, _tracker.headTracker_column] == _entities.fruit;
+        bool eateble = _snakeMap.whatIsAhead(moveToDo, _tracker.headTrackerY, _tracker.headTrackerX) == "fruit";
 
-        if (playerCrashed)
-        {
-            playerLose = true;
-            return;
-        }
+        _snakeMap.map[_tracker.headTrackerY, _tracker.headTrackerX] = _entities.snakeBody;
+        _snakeMap.map[_tracker.headTrackerY-1, _tracker.headTrackerX] = _entities.snakeHead;
+        _tracker.trackHeadSnake(_tracker.headTrackerY-1, _tracker.headTrackerX);
 
-            _snakeMap.map[_tracker.headTracker_row, _tracker.headTracker_column] = _entities.snakeBody;
-            _snakeMap.map[_tracker.headTracker_row-1, _tracker.headTracker_column] = _entities.snakeHead;
-            _tracker.trackHeadSnake(_tracker.headTracker_row-1, _tracker.headTracker_column);
-
-        if (aheadThereIsAFruit)
+        if (eateble)
         {
             _snakeMap.generateFruit();
             score+=1;
         }
         else
         {
-            _snakeMap.map[_tracker.tailTracker_row, _tracker.tailTracker_column] = _entities.backgroundMap;
+            _snakeMap.map[_tracker.tailTrackerY, _tracker.tailTrackerX] = _entities.backgroundMap;
             trackTailDirection();
-            _tracker.trackTailSnake(tailDirection);        
+            _tracker.trackTailSnake(tailDirection);       
         }
     }
 
     public void moveDown()
     {
-        bool playerCrashed = _tracker.headTracker_row == _snakeMap.map.GetLength(0)-2 || _snakeMap.map[_tracker.headTracker_row+1, _tracker.headTracker_column] == _entities.snakeBody;
-        bool aheadThereIsAFruit = _snakeMap.map[_tracker.headTracker_row+1, _tracker.headTracker_column] == _entities.fruit;
+        bool eateble = _snakeMap.whatIsAhead(moveToDo, _tracker.headTrackerY, _tracker.headTrackerX) == "fruit";
 
-        if (playerCrashed)
-        {
-            playerLose = true;
-            return;
-        }
+        _snakeMap.map[_tracker.headTrackerY, _tracker.headTrackerX] = _entities.snakeBody;
+        _snakeMap.map[_tracker.headTrackerY+1, _tracker.headTrackerX] = _entities.snakeHead;
+        _tracker.trackHeadSnake(_tracker.headTrackerY+1, _tracker.headTrackerX);
 
-            _snakeMap.map[_tracker.headTracker_row, _tracker.headTracker_column] = _entities.snakeBody;
-            _snakeMap.map[_tracker.headTracker_row+1, _tracker.headTracker_column] = _entities.snakeHead;
-            _tracker.trackHeadSnake(_tracker.headTracker_row+1, _tracker.headTracker_column);
-
-        if (aheadThereIsAFruit)
+        if (eateble)
         {
             _snakeMap.generateFruit();
             score+=1;
         }
         else
         {
-            _snakeMap.map[_tracker.tailTracker_row, _tracker.tailTracker_column] = _entities.backgroundMap;
+            _snakeMap.map[_tracker.tailTrackerY, _tracker.tailTrackerX] = _entities.backgroundMap;
             trackTailDirection();
-            _tracker.trackTailSnake(tailDirection);           
+            _tracker.trackTailSnake(tailDirection);      
         }
     }
         
     public void moveRight()
     {
-        bool playerCrashed = _tracker.headTracker_column == _snakeMap.map.GetLength(1)-2 || _snakeMap.map[_tracker.headTracker_row, _tracker.headTracker_column+1] == _entities.snakeBody;
-        bool aheadThereIsAFruit = _snakeMap.map[_tracker.headTracker_row, _tracker.headTracker_column+1] == _entities.fruit;
+        bool eateble = _snakeMap.whatIsAhead(moveToDo, _tracker.headTrackerY, _tracker.headTrackerX) == "fruit";
 
-        if (playerCrashed)
-        {
-            playerLose = true;
-            return;
-        }
+        _snakeMap.map[_tracker.headTrackerY, _tracker.headTrackerX] = _entities.snakeBody;
+        _snakeMap.map[_tracker.headTrackerY, _tracker.headTrackerX+1] = _entities.snakeHead;
+        _tracker.trackHeadSnake(_tracker.headTrackerY, _tracker.headTrackerX+1);
 
-        _snakeMap.map[_tracker.headTracker_row, _tracker.headTracker_column] = _entities.snakeBody;
-        _snakeMap.map[_tracker.headTracker_row, _tracker.headTracker_column+1] = _entities.snakeHead;
-        _tracker.trackHeadSnake(_tracker.headTracker_row, _tracker.headTracker_column+1);
-
-        if (aheadThereIsAFruit)
+        if (eateble)
         {
             _snakeMap.generateFruit();
             score+=1;
         }
         else
         {
-            _snakeMap.map[_tracker.tailTracker_row, _tracker.tailTracker_column] = _entities.backgroundMap;
+            _snakeMap.map[_tracker.tailTrackerY, _tracker.tailTrackerX] = _entities.backgroundMap;
             trackTailDirection();
-            _tracker.trackTailSnake(tailDirection);
-        }
+            _tracker.trackTailSnake(tailDirection);        }
     }
 
     public void moveLeft()
     {
-        bool playerCrashed = _tracker.headTracker_column == 1|| _snakeMap.map[_tracker.headTracker_row, _tracker.headTracker_column-1] == _entities.snakeBody;
-        bool aheadThereIsAFruit = _snakeMap.map[_tracker.headTracker_row, _tracker.headTracker_column-1] == _entities.fruit;
+        bool eateble = _snakeMap.whatIsAhead(moveToDo, _tracker.headTrackerY, _tracker.headTrackerX) == "fruit";
 
-        if (playerCrashed)
-        {
-            playerLose = true;
-            return;
-        }
+        _snakeMap.map[_tracker.headTrackerY, _tracker.headTrackerX] = _entities.snakeBody;
+        _snakeMap.map[_tracker.headTrackerY, _tracker.headTrackerX-1] = _entities.snakeHead;
+        _tracker.trackHeadSnake(_tracker.headTrackerY, _tracker.headTrackerX-1);
 
-            _snakeMap.map[_tracker.headTracker_row, _tracker.headTracker_column] = _entities.snakeBody;
-            _snakeMap.map[_tracker.headTracker_row, _tracker.headTracker_column-1] = _entities.snakeHead;
-            _tracker.trackHeadSnake(_tracker.headTracker_row, _tracker.headTracker_column-1);
-
-        if (aheadThereIsAFruit)
+        if (eateble)
         {
             _snakeMap.generateFruit();
             score+=1;
         }
         else
         {
-            _snakeMap.map[_tracker.tailTracker_row, _tracker.tailTracker_column] = _entities.backgroundMap;
+            _snakeMap.map[_tracker.tailTrackerY, _tracker.tailTrackerX] = _entities.backgroundMap;
             trackTailDirection();
             _tracker.trackTailSnake(tailDirection);
         }
@@ -179,10 +170,16 @@ public class SnakeGame
 
     public void trackTailDirection()
     {
-        string upToTail = _snakeMap.map[_tracker.tailTracker_row-1,_tracker.tailTracker_column];
-        string downToTail = _snakeMap.map[_tracker.tailTracker_row+1,_tracker.tailTracker_column];
-        string rightToTail = _snakeMap.map[_tracker.tailTracker_row,_tracker.tailTracker_column+1];
-        string leftToTail = _snakeMap.map[_tracker.tailTracker_row,_tracker.tailTracker_column-1];
+
+        string upToTail = _snakeMap.map[_tracker.tailTrackerY-1,_tracker.tailTrackerX];
+        string downToTail = _snakeMap.map[_tracker.tailTrackerY+1,_tracker.tailTrackerX];
+        string rightToTail = _snakeMap.map[_tracker.tailTrackerY,_tracker.tailTrackerX+1];
+        string leftToTail = _snakeMap.map[_tracker.tailTrackerY,_tracker.tailTrackerX-1];
+
+        // string upToTail = _snakeMap.setCeilAhead("up", _tracker.tailTrackerY, _tracker.tailTrackerX);
+        // string downToTail = _snakeMap.setCeilAhead("down", _tracker.tailTrackerY, _tracker.tailTrackerX);
+        // string rightToTail = _snakeMap.setCeilAhead("right", _tracker.tailTrackerY, _tracker.tailTrackerX);
+        // string leftToTail = _snakeMap.setCeilAhead("left", _tracker.tailTrackerY, _tracker.tailTrackerX);
         
         if (upToTail == _entities.snakeBody)
         {
@@ -200,11 +197,5 @@ public class SnakeGame
         {
             tailDirection =  "left";
         }
-
     }
-    private void finishGame()
-    {
-        _userInterface.writeMessage($"-------------\nYOU CRASHED!\nScore: {score}\n-------------");
-    }
-
 }
