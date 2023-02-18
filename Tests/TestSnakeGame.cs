@@ -14,8 +14,7 @@ public class Tests
         SnakeGame game = CreateSnakeGame(5, 8);
         SnakeUIStub UIStub = CreateSnakeUIStub();
         
-        game._snakeMap.createInitialMap();
-        game._tracker.trackSnakeForInitialMap(game._snakeMap.map, game._entities.snakeHead);
+        game._tracker.registMove("up");
         game.moveUp();        
 
         string mapExpected =
@@ -33,8 +32,7 @@ public class Tests
         SnakeGame game = CreateSnakeGame(5, 8);
         SnakeUIStub UIStub = CreateSnakeUIStub();
 
-        game._snakeMap.createInitialMap();
-        game._tracker.trackSnakeForInitialMap(game._snakeMap.map, game._entities.snakeHead);
+        game._tracker.registMove("down");
         game.moveDown();        
         
         string mapExpected =
@@ -52,8 +50,7 @@ public class Tests
         SnakeGame game = CreateSnakeGame(5, 8);
         SnakeUIStub UIStub = CreateSnakeUIStub();
 
-        game._snakeMap.createInitialMap();
-        game._tracker.trackSnakeForInitialMap(game._snakeMap.map, game._entities.snakeHead);
+        game._tracker.registMove("right");
         game.moveRight();
 
         string mapExpected =
@@ -71,9 +68,9 @@ public class Tests
         SnakeGame game = CreateSnakeGame(5, 8);
         SnakeUIStub UIStub = CreateSnakeUIStub();
 
-        game._snakeMap.createInitialMap();
-        game._tracker.trackSnakeForInitialMap(game._snakeMap.map, game._entities.snakeHead);
+        game._tracker.registMove("up");
         game.moveUp();
+        game._tracker.registMove("left");
         game.moveLeft();
 
         string mapExpected =
@@ -82,8 +79,8 @@ public class Tests
             "*   #  *\n"+
             "*      *\n"+
             "********\n";
+        
         Assert.That(UIStub.drawGame(game._snakeMap.map), Is.EqualTo(mapExpected));
-
     }
     
     private SnakeGame CreateSnakeGame(int heightOfMap , int widthOfMap)
@@ -92,6 +89,10 @@ public class Tests
         SnakeMap SMap = new SnakeMap(heightOfMap, widthOfMap);
 
         var game = new SnakeGame(userInterface, SMap);
+
+        game._snakeMap.createInitialMap();
+        game._tracker.trackSnakeForInitialMap(game._snakeMap.map, game._entities.snakeHead);
+        game._tracker.registMove("right");
 
         return game;
     }
