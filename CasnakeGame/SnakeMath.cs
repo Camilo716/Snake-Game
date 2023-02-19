@@ -1,3 +1,4 @@
+namespace casnake.Game;
 public class SnakeMath
 {
     public int round(float val)
