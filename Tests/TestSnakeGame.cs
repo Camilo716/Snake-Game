@@ -1,18 +1,31 @@
 namespace casnake.Tests;
 using casnake.Game;
+using casnake.SnakeUI;
 
 public class Tests
 {
+    SnakeUIStub _UIStub = new SnakeUIStub();
+    IGameComponentsUI _gameComponents = new ConsoleGameComponents();
+    string fruit = "";
+    string snakeBody = "";
+    string snakeHead = "";
+    string borderMap = "";
+    string background = "";
+
     [SetUp]
-    public void Setup()
+    public void createGameComponents()
     {
+        fruit = _gameComponents.getGameComponent("Fruit");
+        snakeBody = _gameComponents.getGameComponent("SnakeBody");
+        snakeHead = _gameComponents.getGameComponent("SnakeHead");
+        borderMap = _gameComponents.getGameComponent("BorderMap");
+        background = _gameComponents.getGameComponent("Background");
     }
 
     [Test]
     public void validate_move_up()
     {
         SnakeGame game = CreateSnakeGame(5, 8);
-        SnakeUIStub UIStub = CreateSnakeUIStub();
         
         game._tracker.registMove("up");
         game.moveUp();        
@@ -23,14 +36,13 @@ public class Tests
             "* 0 #  *\n"+
             "*      *\n"+
             "********\n";
-        Assert.That(UIStub.drawGame(game._snakeMap.map) , Is.EqualTo(mapExpected));
+        Assert.That(_UIStub.drawGame(game._snakeMap.map) , Is.EqualTo(mapExpected));
     }
 
     [Test]
     public void validate_move_Down()
     {
         SnakeGame game = CreateSnakeGame(5, 8);
-        SnakeUIStub UIStub = CreateSnakeUIStub();
 
         game._tracker.registMove("down");
         game.moveDown();        
@@ -41,14 +53,13 @@ public class Tests
             "* 0 #  *\n"+
             "* @    *\n"+
             "********\n";
-        Assert.That(UIStub.drawGame(game._snakeMap.map), Is.EqualTo(mapExpected));
+        Assert.That(_UIStub.drawGame(game._snakeMap.map), Is.EqualTo(mapExpected));
     }
 
     [Test]
     public void validate_move_to_the_right()
     {
         SnakeGame game = CreateSnakeGame(5, 8);
-        SnakeUIStub UIStub = CreateSnakeUIStub();
 
         game._tracker.registMove("right");
         game.moveRight();
@@ -59,14 +70,13 @@ public class Tests
             "* 0@#  *\n"+
             "*      *\n"+
             "********\n";
-        Assert.That(UIStub.drawGame(game._snakeMap.map), Is.EqualTo(mapExpected));
+        Assert.That(_UIStub.drawGame(game._snakeMap.map), Is.EqualTo(mapExpected));
     }
 
     [Test]
     public void validate_move_to_the_left()
     {
         SnakeGame game = CreateSnakeGame(5, 8);
-        SnakeUIStub UIStub = CreateSnakeUIStub();
 
         game._tracker.registMove("up");
         game.moveUp();
@@ -80,7 +90,7 @@ public class Tests
             "*      *\n"+
             "********\n";
         
-        Assert.That(UIStub.drawGame(game._snakeMap.map), Is.EqualTo(mapExpected));
+        Assert.That(_UIStub.drawGame(game._snakeMap.map), Is.EqualTo(mapExpected));
     }
     
     private SnakeGame CreateSnakeGame(int heightOfMap , int widthOfMap)
@@ -91,15 +101,9 @@ public class Tests
         var game = new SnakeGame(userInterface, SMap);
 
         game._snakeMap.createInitialMap();
-        game._tracker.trackSnakeForInitialMap(game._snakeMap.map, game._entities.snakeHead);
+        game._tracker.trackSnakeForInitialMap(game._snakeMap.map, snakeHead);
         game._tracker.registMove("right");
 
         return game;
-    }
-
-    private SnakeUIStub CreateSnakeUIStub()
-    {
-        var UIStub = new SnakeUIStub();
-        return UIStub;
     }
 }

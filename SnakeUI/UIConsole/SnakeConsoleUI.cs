@@ -1,10 +1,4 @@
-public interface ISnakeUI
-{
-    public void writeMessage(string message);
-    public string readNextMove();
-    public string drawGame(string [,] map);
-
-}
+namespace casnake.SnakeUI;
 
 public class SnakeUIConsole : ISnakeUI
 {
@@ -34,5 +28,26 @@ public class SnakeUIConsole : ISnakeUI
             Console.Write("\n");
         }
         return "";
+    }
+}
+public class ConsoleGameComponents : IGameComponentsUI
+{
+    Dictionary<string, string> gameComponents = new Dictionary<string, string>()
+    {
+        {"SnakeHead", "@"},
+        {"SnakeBody", "0"},
+        {"Background", " "},
+        {"Fruit", "#"},
+        {"BorderMap", "*"}
+    };
+
+    public string getGameComponent(string gameComponent)
+    {
+        if (gameComponents.ContainsKey(gameComponent))
+        {
+            return gameComponents[gameComponent];
+        }
+
+        return " ";
     }
 }

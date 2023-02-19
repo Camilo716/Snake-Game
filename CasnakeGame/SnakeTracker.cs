@@ -65,7 +65,7 @@ public class SnakeTracker
 
             default:
                 break;
-       }
+        }
         controlTrack(tailDirectionToMove, bodyLength);
     }
 

@@ -1,15 +1,22 @@
 namespace casnake.Game;
+using casnake.SnakeUI;
 
 public class SnakeMap
 {
     public string[,] map;
+    private SnakeMath _math;
     private int heightOfMap; // Rows
     private int widthOfMap;  // Columns
     private int maxIndexRow;
     private int maxIndexColumn;
     private string? ceilAhead;
-    public Entities _entities;
-    private SnakeMath _math;
+
+    private IGameComponentsUI _gameComponents;
+    private string snakeBody;
+    private string snakeHead;
+    private string backgroundMap;
+    private string fruit;
+    private string borderMap;
 
     public SnakeMap(int heightOfMap, int widthOfMap)
     {
@@ -18,8 +25,14 @@ public class SnakeMap
         this.map = new string[heightOfMap,widthOfMap];
         this.maxIndexRow = this.map.GetLength(0);
         this.maxIndexColumn = this.map.GetLength(1);
-        this._entities = new Entities();
         this._math = new SnakeMath();
+
+        _gameComponents = new ConsoleGameComponents();
+        this.snakeHead = _gameComponents.getGameComponent("SnakeHead");
+        this.snakeBody = _gameComponents.getGameComponent("SnakeBody");
+        this.fruit = _gameComponents.getGameComponent("Fruit");
+        this.borderMap = _gameComponents.getGameComponent("BorderMap");
+        this.backgroundMap = _gameComponents.getGameComponent("Background");
     }
 
     public void createInitialMap()
@@ -35,23 +48,23 @@ public class SnakeMap
 
                 if (place_to_create_snake)
                 {
-                    this.map[row,column] = _entities.snakeHead;
-                    this.map[row, column-1] = _entities.snakeBody;
+                    this.map[row,column] = snakeHead;
+                    this.map[row, column-1] = snakeBody;
                 }
                 else if (middle_of_map)
                 {
-                    this.map[row,column] = _entities.fruit;
+                    this.map[row,column] = fruit;
                 }
                 else if (vertical_border_of_map)
                 {
-                    this.map[row,column] = _entities.borderOfMap;
+                    this.map[row,column] = borderMap;
                 }
                 else if (horizonal_border_of_map)
                 {
-                    this.map[row,column] = _entities.borderOfMap;
+                    this.map[row,column] = borderMap;
                 }
                 else{
-                    this.map[row,column] = _entities.backgroundMap;
+                    this.map[row,column] = backgroundMap;
                 }
             }
         }
@@ -64,11 +77,11 @@ public class SnakeMap
             int rowNewFruit = _math.randomNumberForRow(maxIndexRow);
             int columnNewFruit = _math.randomNumberForColumn(maxIndexColumn);
 
-            bool placeWithoutAnotherEntities = map[rowNewFruit, columnNewFruit] == _entities.backgroundMap;
+            bool placeWithoutAnotherEntities = map[rowNewFruit, columnNewFruit] == backgroundMap;
 
             if (placeWithoutAnotherEntities)
             {
-                map[rowNewFruit, columnNewFruit] = _entities.fruit;
+                map[rowNewFruit, columnNewFruit] = fruit;
                 break;
             }
         }
@@ -78,19 +91,19 @@ public class SnakeMap
     {
         ceilAhead = setCeilAhead(direction,row,column);
 
-        if (ceilAhead == _entities.borderOfMap || ceilAhead == _entities.snakeBody)
+        if (ceilAhead == borderMap || ceilAhead == snakeBody)
         {
             return "collition";
         }
-        if (ceilAhead == _entities.backgroundMap)
+        if (ceilAhead == backgroundMap)
         {
             return "backgroundMap";
         }
-        else if (ceilAhead == _entities.fruit)
+        else if (ceilAhead == fruit)
         {
             return "fruit";       
         }
-        else if (ceilAhead == _entities.snakeBody)
+        else if (ceilAhead == snakeBody)
         {
             return "body";
         }

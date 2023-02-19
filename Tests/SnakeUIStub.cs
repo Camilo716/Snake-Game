@@ -1,4 +1,5 @@
 namespace casnake.Tests;
+using casnake.SnakeUI;
 
 public class SnakeUIStub : ISnakeUI
 {

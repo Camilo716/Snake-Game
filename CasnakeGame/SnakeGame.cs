@@ -1,22 +1,34 @@
 namespace casnake.Game;
+using casnake.SnakeUI;
 
 public class SnakeGame
 {
     public SnakeMap _snakeMap;
     public SnakeTracker _tracker;
-    public Entities _entities;
     private string moveToDo;
     private int score = 2;
-    private ISnakeUI _userInterface;
-    
+    private ISnakeUI _userInterface;    
+    private IGameComponentsUI  _gameComponents;
+
+    private string snakeBody;
+    private string snakeHead;
+    private string background;
+    private string fruit;
+    private string borderMap;
 
     public SnakeGame(ISnakeUI _userInterface, SnakeMap _snakeMap)
     {
         this._userInterface = _userInterface;
         this._snakeMap = _snakeMap;
-        this._entities = new Entities();
         this._tracker = new SnakeTracker();
         this.moveToDo = "right";
+
+        _gameComponents = new ConsoleGameComponents();
+        this.snakeHead = _gameComponents.getGameComponent("SnakeHead");
+        this.snakeBody = _gameComponents.getGameComponent("SnakeBody");
+        this.fruit = _gameComponents.getGameComponent("Fruit");
+        this.borderMap = _gameComponents.getGameComponent("BorderMap");
+        this.background = _gameComponents.getGameComponent("Background");
     }
 
     public void playGame()
@@ -40,7 +52,7 @@ public class SnakeGame
     {
         _snakeMap.createInitialMap();
         _userInterface.drawGame(_snakeMap.map);
-        _tracker.trackSnakeForInitialMap(_snakeMap.map, _entities.snakeHead);
+        _tracker.trackSnakeForInitialMap(_snakeMap.map, snakeHead);
         _tracker.registMove("right");
     }
 
@@ -93,8 +105,8 @@ public class SnakeGame
     {
         bool fruitAhead = _snakeMap.whatIsAhead(moveToDo, _tracker.headTrackerY, _tracker.headTrackerX) == "fruit";
 
-        _snakeMap.map[_tracker.headTrackerY, _tracker.headTrackerX] = _entities.snakeBody;
-        _snakeMap.map[_tracker.headTrackerY-1, _tracker.headTrackerX] = _entities.snakeHead;
+        _snakeMap.map[_tracker.headTrackerY, _tracker.headTrackerX] = snakeBody;
+        _snakeMap.map[_tracker.headTrackerY-1, _tracker.headTrackerX] = snakeHead;
     
         _tracker.trackHeadSnake(_tracker.headTrackerY-1, _tracker.headTrackerX);
 
@@ -105,7 +117,7 @@ public class SnakeGame
         }
         else
         {
-            _snakeMap.map[_tracker.tailTrackerY, _tracker.tailTrackerX] = _entities.backgroundMap;
+            _snakeMap.map[_tracker.tailTrackerY, _tracker.tailTrackerX] = background;
             _tracker.trackTailSnake(score); 
         }
 
@@ -115,8 +127,8 @@ public class SnakeGame
     {
         bool fruitAhead = _snakeMap.whatIsAhead(moveToDo, _tracker.headTrackerY, _tracker.headTrackerX) == "fruit";
 
-        _snakeMap.map[_tracker.headTrackerY, _tracker.headTrackerX] = _entities.snakeBody;
-        _snakeMap.map[_tracker.headTrackerY+1, _tracker.headTrackerX] = _entities.snakeHead;
+        _snakeMap.map[_tracker.headTrackerY, _tracker.headTrackerX] = snakeBody;
+        _snakeMap.map[_tracker.headTrackerY+1, _tracker.headTrackerX] = snakeHead;
         _tracker.trackHeadSnake(_tracker.headTrackerY+1, _tracker.headTrackerX);
 
         if (fruitAhead)
@@ -126,7 +138,7 @@ public class SnakeGame
         }
         else
         {
-            _snakeMap.map[_tracker.tailTrackerY, _tracker.tailTrackerX] = _entities.backgroundMap;
+            _snakeMap.map[_tracker.tailTrackerY, _tracker.tailTrackerX] = background;
             _tracker.trackTailSnake(score);      
         }
     }
@@ -135,8 +147,8 @@ public class SnakeGame
     {
         bool fruitAhead = _snakeMap.whatIsAhead(moveToDo, _tracker.headTrackerY, _tracker.headTrackerX) == "fruit";
 
-        _snakeMap.map[_tracker.headTrackerY, _tracker.headTrackerX] = _entities.snakeBody;
-        _snakeMap.map[_tracker.headTrackerY, _tracker.headTrackerX+1] = _entities.snakeHead;
+        _snakeMap.map[_tracker.headTrackerY, _tracker.headTrackerX] = snakeBody;
+        _snakeMap.map[_tracker.headTrackerY, _tracker.headTrackerX+1] = snakeHead;
         _tracker.trackHeadSnake(_tracker.headTrackerY, _tracker.headTrackerX+1);
 
         if (fruitAhead)
@@ -146,7 +158,7 @@ public class SnakeGame
         }
         else
         {
-            _snakeMap.map[_tracker.tailTrackerY, _tracker.tailTrackerX] = _entities.backgroundMap;
+            _snakeMap.map[_tracker.tailTrackerY, _tracker.tailTrackerX] = background;
             _tracker.trackTailSnake(score);       
         }
     }
@@ -155,8 +167,8 @@ public class SnakeGame
     {
         bool fruitAhead = _snakeMap.whatIsAhead(moveToDo, _tracker.headTrackerY, _tracker.headTrackerX) == "fruit";
 
-        _snakeMap.map[_tracker.headTrackerY, _tracker.headTrackerX] = _entities.snakeBody;
-        _snakeMap.map[_tracker.headTrackerY, _tracker.headTrackerX-1] = _entities.snakeHead;
+        _snakeMap.map[_tracker.headTrackerY, _tracker.headTrackerX] = snakeBody;
+        _snakeMap.map[_tracker.headTrackerY, _tracker.headTrackerX-1] = snakeHead;
         _tracker.trackHeadSnake(_tracker.headTrackerY, _tracker.headTrackerX-1);
 
         if (fruitAhead)
@@ -166,7 +178,7 @@ public class SnakeGame
         }
         else
         {
-            _snakeMap.map[_tracker.tailTrackerY, _tracker.tailTrackerX] = _entities.backgroundMap;
+            _snakeMap.map[_tracker.tailTrackerY, _tracker.tailTrackerX] = background;
             _tracker.trackTailSnake(score);
         }
     }
