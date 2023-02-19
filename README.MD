@@ -11,5 +11,5 @@ Program which replies the logic and interactions of famous snake game
 - Move to the right: d
 - Move to the left: a
 
-# Test
+## Test
 `dotnet test`
