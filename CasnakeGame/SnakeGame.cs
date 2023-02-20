@@ -5,11 +5,11 @@ public class SnakeGame
 {
     public SnakeMap _snakeMap;
     public SnakeTracker _tracker;
-    private string moveToDo;
+    private string actualMove = "right";
     private int score = 2;
-    private ISnakeUI _userInterface;    
-    private IGameComponentsUI  _gameComponents;
+    private ISnakeUI _userInterface;
 
+    private IGameComponentsUI  _gameComponents;
     private string snakeBody;
     private string snakeHead;
     private string background;
@@ -21,7 +21,6 @@ public class SnakeGame
         this._userInterface = _userInterface;
         this._snakeMap = _snakeMap;
         this._tracker = new SnakeTracker();
-        this.moveToDo = "right";
 
         _gameComponents = new ConsoleGameComponents();
         this.snakeHead = _gameComponents.getGameComponent("SnakeHead");
@@ -37,17 +36,30 @@ public class SnakeGame
 
         while (true)
         {
-            moveToDo = _userInterface.readNextMove();
-        
-            if (verificateIfPlayerCrashed(moveToDo))
+            string moveToDo = _userInterface.readNextMove();
+            registNextMove(moveToDo);
+
+            bool validMovement = checkIfWasAValidMovement();
+
+            if (validMovement == false)
+            {
+                _tracker.removeInvalidMovementFromRegistry();
+                continue;
+            }
+
+            setActualMove();
+
+            if (verificateIfPlayerCrashed())
             {
                 finishGame();
                 return;
             }
-            nextMove();
+            
+            moveSnake();
+            _userInterface.drawGame(_snakeMap.map);
         }  
     }
-
+    
     private void startGame()
     {
         _snakeMap.createInitialMap();
@@ -56,9 +68,48 @@ public class SnakeGame
         _tracker.registMove("right");
     }
 
-    public bool verificateIfPlayerCrashed(string direction)
+    private void registNextMove(string moveToDo)
+    {        
+        switch (moveToDo)
+        {
+            case "w":
+                _tracker.registMove("up");
+                break;
+            case "a":
+                _tracker.registMove("left");
+                break;
+            case "s":
+                _tracker.registMove("down");
+                break;
+            case "d":
+                _tracker.registMove("right");
+                break;
+            default:
+                _tracker.registMove("error");
+                break;
+        }
+    }
+
+    private bool checkIfWasAValidMovement()
     {
-        bool playerCrashed = _snakeMap.whatIsAhead(direction, _tracker.headTrackerY, _tracker.headTrackerX) == "collition";
+        if (_tracker.getLastMove() == "error")
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+
+    public void setActualMove()
+    {
+        actualMove = _tracker.getLastMove();
+    }
+
+    private bool verificateIfPlayerCrashed()
+    {        
+        bool playerCrashed = _snakeMap.whatIsAhead(actualMove, _tracker.headTrackerY, _tracker.headTrackerX) == "collition";
 
         if (playerCrashed)
         {
@@ -67,119 +118,47 @@ public class SnakeGame
         return false;
     }
 
+    public void moveSnake()
+    {        
+        bool fruitAhead = checkIfAheadThereIsAFruit();
+
+        moveSnakeHead(actualMove);
+        moveSnakeBody(fruitAhead);
+    }
+
+    public bool checkIfAheadThereIsAFruit()
+    {
+        if (_snakeMap.whatIsAhead(actualMove, _tracker.headTrackerY, _tracker.headTrackerX) == "fruit")
+        {
+            return true;
+        }
+        return false;
+    }
+
+    public void moveSnakeHead(string direction)
+    {
+        _snakeMap.modifyActualCeil(_tracker.headTrackerY, _tracker.headTrackerX, snakeBody);
+        _snakeMap.modifyCeilAhead(actualMove, _tracker.headTrackerY, _tracker.headTrackerX, snakeHead);
+        _tracker.trackHeadSnake(actualMove, _tracker.headTrackerY, _tracker.headTrackerX);
+    }
+
+
+    public void moveSnakeBody(bool aheadThereIsAFruit)
+    {
+        if (aheadThereIsAFruit)
+        {
+            _snakeMap.generateFruit();
+            score+=1;
+        }
+        else
+        {
+            _snakeMap.modifyActualCeil(_tracker.tailTrackerY, _tracker.tailTrackerX, background);
+            _tracker.trackTailSnake(score); 
+        }
+    }
+
     private void finishGame()
     {
         _userInterface.writeMessage($"-------------\nYOU CRASHED!\nScore: {score}\n-------------");
-    }
-
-    private void nextMove()
-    {
-        switch (moveToDo)
-        {
-            case "w":
-                _tracker.registMove("up");
-                moveUp();
-                _userInterface.drawGame(_snakeMap.map);
-                break;
-            case "a":
-                _tracker.registMove("left");
-                moveLeft();
-                _userInterface.drawGame(_snakeMap.map);
-                break;
-            case "s":
-                _tracker.registMove("down");
-                moveDown();
-                _userInterface.drawGame(_snakeMap.map);
-                break;
-            case "d":
-                _tracker.registMove("right");
-                moveRight();
-                _userInterface.drawGame(_snakeMap.map);
-                break;
-            default:
-                break;
-        }
-    }
-
-    public void moveUp()
-    {
-        bool fruitAhead = _snakeMap.whatIsAhead(moveToDo, _tracker.headTrackerY, _tracker.headTrackerX) == "fruit";
-
-        _snakeMap.map[_tracker.headTrackerY, _tracker.headTrackerX] = snakeBody;
-        _snakeMap.map[_tracker.headTrackerY-1, _tracker.headTrackerX] = snakeHead;
-    
-        _tracker.trackHeadSnake(_tracker.headTrackerY-1, _tracker.headTrackerX);
-
-        if (fruitAhead)
-        {
-            _snakeMap.generateFruit();
-            score+=1;
-        }
-        else
-        {
-            _snakeMap.map[_tracker.tailTrackerY, _tracker.tailTrackerX] = background;
-            _tracker.trackTailSnake(score); 
-        }
-
-    }
-
-    public void moveDown()
-    {
-        bool fruitAhead = _snakeMap.whatIsAhead(moveToDo, _tracker.headTrackerY, _tracker.headTrackerX) == "fruit";
-
-        _snakeMap.map[_tracker.headTrackerY, _tracker.headTrackerX] = snakeBody;
-        _snakeMap.map[_tracker.headTrackerY+1, _tracker.headTrackerX] = snakeHead;
-        _tracker.trackHeadSnake(_tracker.headTrackerY+1, _tracker.headTrackerX);
-
-        if (fruitAhead)
-        {
-            _snakeMap.generateFruit();
-            score+=1;
-        }
-        else
-        {
-            _snakeMap.map[_tracker.tailTrackerY, _tracker.tailTrackerX] = background;
-            _tracker.trackTailSnake(score);      
-        }
-    }
-        
-    public void moveRight()
-    {
-        bool fruitAhead = _snakeMap.whatIsAhead(moveToDo, _tracker.headTrackerY, _tracker.headTrackerX) == "fruit";
-
-        _snakeMap.map[_tracker.headTrackerY, _tracker.headTrackerX] = snakeBody;
-        _snakeMap.map[_tracker.headTrackerY, _tracker.headTrackerX+1] = snakeHead;
-        _tracker.trackHeadSnake(_tracker.headTrackerY, _tracker.headTrackerX+1);
-
-        if (fruitAhead)
-        {
-            _snakeMap.generateFruit();
-            score+=1;
-        }
-        else
-        {
-            _snakeMap.map[_tracker.tailTrackerY, _tracker.tailTrackerX] = background;
-            _tracker.trackTailSnake(score);       
-        }
-    }
-
-    public void moveLeft()
-    {
-        bool fruitAhead = _snakeMap.whatIsAhead(moveToDo, _tracker.headTrackerY, _tracker.headTrackerX) == "fruit";
-
-        _snakeMap.map[_tracker.headTrackerY, _tracker.headTrackerX] = snakeBody;
-        _snakeMap.map[_tracker.headTrackerY, _tracker.headTrackerX-1] = snakeHead;
-        _tracker.trackHeadSnake(_tracker.headTrackerY, _tracker.headTrackerX-1);
-
-        if (fruitAhead)
-        {
-            _snakeMap.generateFruit();
-            score+=1;
-        }
-        else
-        {
-            _snakeMap.map[_tracker.tailTrackerY, _tracker.tailTrackerX] = background;
-            _tracker.trackTailSnake(score);
-        }
     }
 }

@@ -19,6 +19,16 @@ public class SnakeTracker
         moveRegister.Add(moveToRegist);
     }
 
+    public void removeInvalidMovementFromRegistry()
+    {
+        moveRegister.RemoveAt(moveRegister.Count - 1);
+    }
+
+    public string getLastMove()
+    {
+        return moveRegister.Last();
+    }
+
     public void trackSnakeForInitialMap(string[,] map, string head)
     {
         for (int row = 0; row < map.GetLength(0); row++)
@@ -27,7 +37,8 @@ public class SnakeTracker
             {
                 if (map[row,column] == head)
                 {
-                    trackHeadSnake(row,column);
+                    headTrackerY = row;
+                    headTrackerX = column;
                     tailTrackerY = row;
                     tailTrackerX = column-1;
                 }
@@ -35,10 +46,25 @@ public class SnakeTracker
         }
     }
 
-    public void trackHeadSnake(int headRow, int headColumn)
+    public void trackHeadSnake(string direction,int headRow, int headColumn)
     {
-        headTrackerY = headRow;
-        headTrackerX = headColumn;
+        switch (direction)
+        {
+            case "up":
+                headTrackerY = headTrackerY-1;
+                break;
+            case "down":
+                headTrackerY = headTrackerY+1;
+                break;
+            case "right":
+                headTrackerX = headTrackerX+1;
+                break;
+            case "left":
+                headTrackerX = headTrackerX-1;
+                break;     
+            default:
+                break;
+        }  
     }
 
     public void trackTailSnake(int bodyLength)
@@ -50,23 +76,18 @@ public class SnakeTracker
             case "up":
                 tailTrackerY = tailTrackerY-1;
                 break;
-
             case "down":
                 tailTrackerY = tailTrackerY+1;
                 break;
-
             case "right":
                 tailTrackerX = tailTrackerX+1;
                 break;
-
             case "left":
                 tailTrackerX = tailTrackerX-1;
                 break;     
-
             default:
                 break;
         }
-        controlTrack(tailDirectionToMove, bodyLength);
     }
 
     private string trackTailDirection(int bodyLength)
@@ -74,13 +95,12 @@ public class SnakeTracker
         return moveRegister[moveRegister.Count()-bodyLength];
     }
 
-    private void controlTrack(string tileDirection, int score)
+    private string controlTrack(string tileDirection, int score)
     {
-        
-        Console.WriteLine(
+        return
             "Head:\t" + headTrackerY + ", " + headTrackerX+ "\n" +
             "Tail:\t" + tailTrackerY + ", " + tailTrackerX + "\n" +
             "TailDirectionToMove:" + tileDirection + "\n" +
-            "BodyLenght:" + score);
+            "BodyLenght:" + score;
     }
 }

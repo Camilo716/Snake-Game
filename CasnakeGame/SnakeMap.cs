@@ -48,23 +48,20 @@ public class SnakeMap
 
                 if (place_to_create_snake)
                 {
-                    this.map[row,column] = snakeHead;
-                    this.map[row, column-1] = snakeBody;
+                    modifyActualCeil(row,column, snakeHead);
+                    modifyCeilAhead("left", row, column, snakeBody);
                 }
                 else if (middle_of_map)
                 {
-                    this.map[row,column] = fruit;
+                    modifyActualCeil(row,column, fruit);
                 }
-                else if (vertical_border_of_map)
+                else if (vertical_border_of_map || horizonal_border_of_map)
                 {
-                    this.map[row,column] = borderMap;
+                    modifyActualCeil(row,column, borderMap);
                 }
-                else if (horizonal_border_of_map)
+                else
                 {
-                    this.map[row,column] = borderMap;
-                }
-                else{
-                    this.map[row,column] = backgroundMap;
+                    modifyActualCeil(row,column, backgroundMap);
                 }
             }
         }
@@ -81,51 +78,65 @@ public class SnakeMap
 
             if (placeWithoutAnotherEntities)
             {
-                map[rowNewFruit, columnNewFruit] = fruit;
+                modifyActualCeil(rowNewFruit,columnNewFruit, fruit);
                 break;
             }
         }
     }
 
+    public void modifyActualCeil(int row, int column, string gameComponentToPut)
+    {
+        map[row,column] = gameComponentToPut;
+    }
+
+    public void modifyCeilAhead(string direction, int row, int column, string gameComponentToPut)
+    {
+        switch (direction)
+        {
+            case "up":
+                map[row-1,column] = gameComponentToPut;
+                break;
+            case "down":
+                map[row+1,column] = gameComponentToPut;
+                break;
+            case "right":
+                map[row,column+1] = gameComponentToPut;
+                break;
+            case "left":
+                map[row,column-1] = gameComponentToPut;
+                break;
+            default:
+                break;
+       }      
+    }
+
     public string whatIsAhead(string direction, int row,int column)
     {
-        ceilAhead = setCeilAhead(direction,row,column);
+        ceilAhead = getCeilAhead(direction,row,column);
 
         if (ceilAhead == borderMap || ceilAhead == snakeBody)
         {
             return "collition";
         }
-        if (ceilAhead == backgroundMap)
-        {
-            return "backgroundMap";
-        }
         else if (ceilAhead == fruit)
         {
             return "fruit";       
         }
-        else if (ceilAhead == snakeBody)
-        {
-            return "body";
-        }
         return "";
     }
 
-    public string setCeilAhead(string direction, int row, int column)
+    private string getCeilAhead(string direction, int row, int column)
     {
         switch (direction)
         {
-            case "w":
+            case "up":
                 return map[row-1,column];
-
-            case "s":
+            case "down":
                 return map[row+1,column];
-
-            case "d":
+            case "right":
                 return map[row,column+1];
-
-            case "a":
+            case "left":
                 return map[row,column-1];     
-
             default:
                 return "";
        }   

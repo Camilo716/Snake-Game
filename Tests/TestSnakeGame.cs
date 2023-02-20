@@ -28,7 +28,8 @@ public class Tests
         SnakeGame game = CreateSnakeGame(5, 8);
         
         game._tracker.registMove("up");
-        game.moveUp();        
+        game.setActualMove();
+        game.moveSnake();        
 
         string mapExpected =
             "********\n"+
@@ -45,7 +46,8 @@ public class Tests
         SnakeGame game = CreateSnakeGame(5, 8);
 
         game._tracker.registMove("down");
-        game.moveDown();        
+        game.setActualMove();
+        game.moveSnake();        
         
         string mapExpected =
             "********\n"+
@@ -62,7 +64,8 @@ public class Tests
         SnakeGame game = CreateSnakeGame(5, 8);
 
         game._tracker.registMove("right");
-        game.moveRight();
+        game.setActualMove();
+        game.moveSnake();
 
         string mapExpected =
             "********\n"+
@@ -79,9 +82,11 @@ public class Tests
         SnakeGame game = CreateSnakeGame(5, 8);
 
         game._tracker.registMove("up");
-        game.moveUp();
+        game.setActualMove();
+        game.moveSnake();
         game._tracker.registMove("left");
-        game.moveLeft();
+        game.setActualMove();
+        game.moveSnake();
 
         string mapExpected =
             "********\n"+
