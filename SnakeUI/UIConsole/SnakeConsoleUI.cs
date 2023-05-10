@@ -2,8 +2,24 @@ namespace casnake.SnakeUI;
 
 public class SnakeUIConsole : ISnakeUI
 {
+    private IGameComponentsUI _consoleGameComponents;
+    private readonly string _snakeHead;
+    private readonly string _snakeBody;
+    private readonly string _fruit;
+
+
+    public SnakeUIConsole()
+    {
+        _consoleGameComponents = new ConsoleGameComponents();
+        _snakeHead = _consoleGameComponents.getGameComponent("SnakeHead");
+        _snakeBody = _consoleGameComponents.getGameComponent("SnakeBody");
+        _fruit = _consoleGameComponents.getGameComponent("Fruit");
+
+    }   
+
     public void writeMessage(string message)
     {
+        Console.ForegroundColor = ConsoleColor.DarkCyan;
         Console.WriteLine(message);
     }
 
@@ -23,7 +39,24 @@ public class SnakeUIConsole : ISnakeUI
         {
             for (int column = 0; column < map.GetLength(1); column++)
             {
-                Console.Write((map[row,column]));
+                bool isSnake = map[row,column] == _snakeHead || map[row,column] == _snakeBody;
+                bool isFruit =  map[row,column] == _fruit;
+
+                if (isSnake)
+                {
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.Write((map[row,column]));
+                }
+                else if (isFruit)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.Write((map[row,column]));        
+                }
+                else
+                {
+                    Console.ForegroundColor = ConsoleColor.White;
+                    Console.Write((map[row,column]));
+                }
             }
             Console.Write("\n");
         }
