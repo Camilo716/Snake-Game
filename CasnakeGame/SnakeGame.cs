@@ -39,9 +39,7 @@ public class SnakeGame
             string moveToDo = _userInterface.readNextMove();
             registNextMove(moveToDo);
 
-            bool validMovement = checkIfWasAValidMovement();
-
-            if (validMovement == false)
+            if (!WasAValidMovement())
             {
                 _tracker.removeInvalidMovementFromRegistry();
                 continue;
@@ -90,16 +88,11 @@ public class SnakeGame
         }
     }
 
-    private bool checkIfWasAValidMovement()
+    private bool WasAValidMovement()
     {
-        if (_tracker.getLastMove() == "error")
-        {
-            return false;
-        }
-        else
-        {
-            return true;
-        }
+        bool validMove = !(_tracker.getLastMove() == "error");
+        
+        return validMove;
     }
 
     public void setActualMove()
