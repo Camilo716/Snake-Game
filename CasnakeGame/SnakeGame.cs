@@ -113,19 +113,16 @@ public class SnakeGame
 
     public void moveSnake()
     {        
-        bool fruitAhead = checkIfAheadThereIsAFruit();
+        bool fruitAhead = aheadThereIsAFruit();
 
         moveSnakeHead(actualMove);
         moveSnakeBody(fruitAhead);
     }
 
-    public bool checkIfAheadThereIsAFruit()
-    {
-        if (_snakeMap.whatIsAhead(actualMove, _tracker.headTrackerY, _tracker.headTrackerX) == "fruit")
-        {
-            return true;
-        }
-        return false;
+    public bool aheadThereIsAFruit()
+    {        
+        bool aheadThereIsAFruit = _snakeMap.whatIsAhead(actualMove, _tracker.headTrackerY, _tracker.headTrackerX) == "fruit";
+        return aheadThereIsAFruit;
     }
 
     public void moveSnakeHead(string direction)
