@@ -6,7 +6,6 @@ public class SnakeTracker
     public int headTrackerX;
     public int tailTrackerY;
     public int tailTrackerX;
-    public int snakeLarge;
     private List<string> moveRegister;
  
     public SnakeTracker()

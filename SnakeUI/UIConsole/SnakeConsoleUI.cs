@@ -14,7 +14,7 @@ public class SnakeUIConsole : ISnakeUI
         _snakeHead = _consoleGameComponents.getGameComponent("SnakeHead");
         _snakeBody = _consoleGameComponents.getGameComponent("SnakeBody");
         _fruit = _consoleGameComponents.getGameComponent("Fruit");
-
+        
     }   
 
     public void writeMessage(string message)
