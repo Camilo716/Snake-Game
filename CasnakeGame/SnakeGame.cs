@@ -47,7 +47,7 @@ public class SnakeGame
 
             setActualMove();
 
-            if (verificateIfPlayerCrashed())
+            if (PlayerCrashed())
             {
                 finishGame();
                 return;
@@ -100,7 +100,7 @@ public class SnakeGame
         actualMove = _tracker.getLastMove();
     }
 
-    private bool verificateIfPlayerCrashed()
+    private bool PlayerCrashed()
     {        
         bool playerCrashed = _snakeMap.whatIsAhead(actualMove, _tracker.headTrackerY, _tracker.headTrackerX) == "collition";
 
