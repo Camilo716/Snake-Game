@@ -6,7 +6,7 @@ public class SnakeGame
     public SnakeMap _snakeMap;
     public SnakeTracker _tracker;
     private string actualMove = "right";
-    private int score = 2;
+    private int snakeLenght = 2;
     private ISnakeUI _userInterface;
 
     private IGameComponentsUI  _gameComponents;
@@ -138,17 +138,17 @@ public class SnakeGame
         if (aheadThereIsAFruit)
         {
             _snakeMap.generateFruit();
-            score+=1;
+            snakeLenght+=1;
         }
         else
         {
             _snakeMap.modifyActualCeil(_tracker.tailTrackerY, _tracker.tailTrackerX, background);
-            _tracker.trackTailSnake(score); 
+            _tracker.trackTailSnake(snakeLenght); 
         }
     }
 
     private void finishGame()
     {
-        _userInterface.writeMessage($"-------------\nYOU CRASHED!\nScore: {score}\n-------------");
+        _userInterface.writeMessage($"-------------\nYOU CRASHED!\nScore: {snakeLenght}\n-------------");
     }
 }
