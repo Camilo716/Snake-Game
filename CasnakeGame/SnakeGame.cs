@@ -47,7 +47,7 @@ public class SnakeGame
             _userInterface.drawGame(_snakeMap.map);
         }  
     }
-    
+
     public void moveSnake()
     {        
         bool fruitAhead = aheadThereIsAFruit();
@@ -102,11 +102,7 @@ public class SnakeGame
     {        
         bool playerCrashed = _snakeMap.whatIsAhead(_actualMove, _tracker.headTrackerY, _tracker.headTrackerX) == "collition";
 
-        if (playerCrashed)
-        {
-            return true;
-        }
-        return false;
+        return playerCrashed;
     }
 
 
