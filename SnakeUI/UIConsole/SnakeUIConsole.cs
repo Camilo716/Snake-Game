@@ -18,11 +18,7 @@ public class SnakeUIConsole : ISnakeUI
     public string readNextMove()
     {
         string? nextMove = Console.ReadLine();
-        if (nextMove != null)
-        {
-            return nextMove;
-        }
-        return "";
+        return nextMove ?? "";
     }
 
     public string drawGame(string[,] map)
