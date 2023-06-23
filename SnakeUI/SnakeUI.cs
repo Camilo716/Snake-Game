@@ -13,6 +13,5 @@ public interface IGameComponentsUI
     public string Background { get; }
     public string Fruit { get; }
     public string BorderMap { get; }
-    public string getGameComponent(string gameComponent);
 }
 
