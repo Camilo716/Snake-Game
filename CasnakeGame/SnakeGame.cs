@@ -8,13 +8,8 @@ public class SnakeGame
     private string actualMove = "right";
     private int snakeLenght = 2;
     private ISnakeUI _userInterface;
-
     private IGameComponentsUI  _gameComponents;
-    private string snakeBody;
-    private string snakeHead;
-    private string background;
-    private string fruit;
-    private string borderMap;
+    
 
     public SnakeGame(ISnakeUI _userInterface, SnakeMap _snakeMap)
     {
@@ -23,11 +18,6 @@ public class SnakeGame
         this._tracker = new SnakeTracker();
 
         _gameComponents = new ConsoleGameComponents();
-        this.snakeHead = _gameComponents.getGameComponent("SnakeHead");
-        this.snakeBody = _gameComponents.getGameComponent("SnakeBody");
-        this.fruit = _gameComponents.getGameComponent("Fruit");
-        this.borderMap = _gameComponents.getGameComponent("BorderMap");
-        this.background = _gameComponents.getGameComponent("Background");
     }
 
     public void playGame()
@@ -62,7 +52,7 @@ public class SnakeGame
     {
         _snakeMap.createInitialMap();
         _userInterface.drawGame(_snakeMap.map);
-        _tracker.trackSnakeForInitialMap(_snakeMap.map, snakeHead);
+        _tracker.trackSnakeForInitialMap(_snakeMap.map, _gameComponents.SnakeHead);
         _tracker.registMove("right");
     }
 
@@ -127,8 +117,8 @@ public class SnakeGame
 
     public void moveSnakeHead(string direction)
     {
-        _snakeMap.modifyActualCeil(_tracker.headTrackerY, _tracker.headTrackerX, snakeBody);
-        _snakeMap.modifyCeilAhead(actualMove, _tracker.headTrackerY, _tracker.headTrackerX, snakeHead);
+        _snakeMap.modifyActualCeil(_tracker.headTrackerY, _tracker.headTrackerX, _gameComponents.SnakeBody);
+        _snakeMap.modifyCeilAhead(actualMove, _tracker.headTrackerY, _tracker.headTrackerX, _gameComponents.SnakeHead);
         _tracker.trackHeadSnake(actualMove, _tracker.headTrackerY, _tracker.headTrackerX);
     }
 
@@ -142,7 +132,7 @@ public class SnakeGame
         }
         else
         {
-            _snakeMap.modifyActualCeil(_tracker.tailTrackerY, _tracker.tailTrackerX, background);
+            _snakeMap.modifyActualCeil(_tracker.tailTrackerY, _tracker.tailTrackerX, _gameComponents.Background);
             _tracker.trackTailSnake(snakeLenght); 
         }
     }

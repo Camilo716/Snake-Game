@@ -8,6 +8,11 @@ public interface ISnakeUI
 
 public interface IGameComponentsUI
 {
+    public string SnakeHead { get; }
+    public string SnakeBody { get; }
+    public string Background { get; }
+    public string Fruit { get; }
+    public string BorderMap { get; }
     public string getGameComponent(string gameComponent);
 }
 
