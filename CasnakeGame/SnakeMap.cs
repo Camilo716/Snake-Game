@@ -10,13 +10,8 @@ public class SnakeMap
     private int maxIndexRow;
     private int maxIndexColumn;
     private string? ceilAhead;
-
     private IGameComponentsUI _gameComponents;
-    private string snakeBody;
-    private string snakeHead;
-    private string backgroundMap;
-    private string fruit;
-    private string borderMap;
+
 
     public SnakeMap(int heightOfMap, int widthOfMap)
     {
@@ -26,13 +21,7 @@ public class SnakeMap
         this.maxIndexRow = this.map.GetLength(0);
         this.maxIndexColumn = this.map.GetLength(1);
         this._math = new SnakeMath();
-
         _gameComponents = new ConsoleGameComponents();
-        this.snakeHead = _gameComponents.getGameComponent("SnakeHead");
-        this.snakeBody = _gameComponents.getGameComponent("SnakeBody");
-        this.fruit = _gameComponents.getGameComponent("Fruit");
-        this.borderMap = _gameComponents.getGameComponent("BorderMap");
-        this.backgroundMap = _gameComponents.getGameComponent("Background");
     }
 
     public void createInitialMap()
@@ -48,20 +37,20 @@ public class SnakeMap
 
                 if (place_to_create_snake)
                 {
-                    modifyActualCeil(row,column, snakeHead);
-                    modifyCeilAhead("left", row, column, snakeBody);
+                    modifyActualCeil(row,column, _gameComponents.SnakeHead);
+                    modifyCeilAhead("left", row, column, _gameComponents.SnakeBody);
                 }
                 else if (middle_of_map)
                 {
-                    modifyActualCeil(row,column, fruit);
+                    modifyActualCeil(row,column, _gameComponents.Fruit);
                 }
                 else if (vertical_border_of_map || horizonal_border_of_map)
                 {
-                    modifyActualCeil(row,column, borderMap);
+                    modifyActualCeil(row,column, _gameComponents.BorderMap);
                 }
                 else
                 {
-                    modifyActualCeil(row,column, backgroundMap);
+                    modifyActualCeil(row,column, _gameComponents.Background);
                 }
             }
         }
@@ -74,11 +63,11 @@ public class SnakeMap
             int rowNewFruit = _math.randomNumberForRow(maxIndexRow);
             int columnNewFruit = _math.randomNumberForColumn(maxIndexColumn);
 
-            bool placeWithoutAnotherEntities = map[rowNewFruit, columnNewFruit] == backgroundMap;
+            bool placeWithoutAnotherEntities = map[rowNewFruit, columnNewFruit] == _gameComponents.Background;
 
             if (placeWithoutAnotherEntities)
             {
-                modifyActualCeil(rowNewFruit,columnNewFruit, fruit);
+                modifyActualCeil(rowNewFruit,columnNewFruit, _gameComponents.Fruit);
                 break;
             }
         }
@@ -114,11 +103,11 @@ public class SnakeMap
     {
         ceilAhead = getCeilAhead(direction,row,column);
 
-        if (ceilAhead == borderMap || ceilAhead == snakeBody)
+        if (ceilAhead == _gameComponents.BorderMap || ceilAhead == _gameComponents.SnakeBody)
         {
             return "collition";
         }
-        else if (ceilAhead == fruit)
+        else if (ceilAhead == _gameComponents.Fruit)
         {
             return "fruit";       
         }
