@@ -5,11 +5,11 @@ public class SnakeGame
 {
     public SnakeMap _snakeMap;
     public SnakeTracker _tracker;
-    private string actualMove = "right";
-    private int snakeLenght = 2;
+    private string _actualMove = "right";
+    private int _snakeLenght = 2;
     private ISnakeUI _userInterface;
     private IGameComponentsUI  _gameComponents;
-    
+
 
     public SnakeGame(ISnakeUI _userInterface, SnakeMap _snakeMap)
     {
@@ -46,6 +46,14 @@ public class SnakeGame
             moveSnake();
             _userInterface.drawGame(_snakeMap.map);
         }  
+    }
+    
+    public void moveSnake()
+    {        
+        bool fruitAhead = aheadThereIsAFruit();
+
+        moveSnakeHead(_actualMove);
+        moveSnakeBody(fruitAhead);
     }
     
     private void startGame()
@@ -87,12 +95,12 @@ public class SnakeGame
 
     public void setActualMove()
     {
-        actualMove = _tracker.getLastMove();
+        _actualMove = _tracker.getLastMove();
     }
 
     private bool PlayerCrashed()
     {        
-        bool playerCrashed = _snakeMap.whatIsAhead(actualMove, _tracker.headTrackerY, _tracker.headTrackerX) == "collition";
+        bool playerCrashed = _snakeMap.whatIsAhead(_actualMove, _tracker.headTrackerY, _tracker.headTrackerX) == "collition";
 
         if (playerCrashed)
         {
@@ -101,44 +109,37 @@ public class SnakeGame
         return false;
     }
 
-    public void moveSnake()
-    {        
-        bool fruitAhead = aheadThereIsAFruit();
 
-        moveSnakeHead(actualMove);
-        moveSnakeBody(fruitAhead);
-    }
-
-    public bool aheadThereIsAFruit()
+    private bool aheadThereIsAFruit()
     {        
-        bool aheadThereIsAFruit = _snakeMap.whatIsAhead(actualMove, _tracker.headTrackerY, _tracker.headTrackerX) == "fruit";
+        bool aheadThereIsAFruit = _snakeMap.whatIsAhead(_actualMove, _tracker.headTrackerY, _tracker.headTrackerX) == "fruit";
         return aheadThereIsAFruit;
     }
 
-    public void moveSnakeHead(string direction)
+    private void moveSnakeHead(string direction)
     {
         _snakeMap.modifyActualCeil(_tracker.headTrackerY, _tracker.headTrackerX, _gameComponents.SnakeBody);
-        _snakeMap.modifyCeilAhead(actualMove, _tracker.headTrackerY, _tracker.headTrackerX, _gameComponents.SnakeHead);
-        _tracker.trackHeadSnake(actualMove, _tracker.headTrackerY, _tracker.headTrackerX);
+        _snakeMap.modifyCeilAhead(_actualMove, _tracker.headTrackerY, _tracker.headTrackerX, _gameComponents.SnakeHead);
+        _tracker.trackHeadSnake(_actualMove, _tracker.headTrackerY, _tracker.headTrackerX);
     }
 
 
-    public void moveSnakeBody(bool aheadThereIsAFruit)
+    private void moveSnakeBody(bool aheadThereIsAFruit)
     {
         if (aheadThereIsAFruit)
         {
             _snakeMap.generateFruit();
-            snakeLenght+=1;
+            _snakeLenght+=1;
         }
         else
         {
             _snakeMap.modifyActualCeil(_tracker.tailTrackerY, _tracker.tailTrackerX, _gameComponents.Background);
-            _tracker.trackTailSnake(snakeLenght); 
+            _tracker.trackTailSnake(_snakeLenght); 
         }
     }
 
     private void finishGame()
     {
-        _userInterface.writeMessage($"-------------\nYOU CRASHED!\nScore: {snakeLenght}\n-------------");
+        _userInterface.writeMessage($"-------------\nYOU CRASHED!\nScore: {_snakeLenght}\n-------------");
     }
 }
