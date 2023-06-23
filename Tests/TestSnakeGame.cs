@@ -5,22 +5,7 @@ using casnake.SnakeUI;
 public class Tests
 {
     SnakeUIStub _UIStub = new SnakeUIStub();
-    IGameComponentsUI _gameComponents = new ConsoleGameComponents();
-    string fruit = "";
-    string snakeBody = "";
-    string snakeHead = "";
-    string borderMap = "";
-    string background = "";
-
-    [SetUp]
-    public void createGameComponents()
-    {
-        fruit = _gameComponents.getGameComponent("Fruit");
-        snakeBody = _gameComponents.getGameComponent("SnakeBody");
-        snakeHead = _gameComponents.getGameComponent("SnakeHead");
-        borderMap = _gameComponents.getGameComponent("BorderMap");
-        background = _gameComponents.getGameComponent("Background");
-    }
+    
 
     [Test]
     public void validate_move_up()
@@ -102,11 +87,12 @@ public class Tests
     {
         SnakeUIStub userInterface = new SnakeUIStub();
         SnakeMap SMap = new SnakeMap(heightOfMap, widthOfMap);
+        IGameComponentsUI _gameComponents = new ConsoleGameComponents();
 
         var game = new SnakeGame(userInterface, SMap);
 
         game._snakeMap.createInitialMap();
-        game._tracker.trackSnakeForInitialMap(game._snakeMap.map, snakeHead);
+        game._tracker.trackSnakeForInitialMap(game._snakeMap.map, _gameComponents.SnakeHead);
         game._tracker.registMove("right");
 
         return game;
