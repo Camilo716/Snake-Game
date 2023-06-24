@@ -2,10 +2,10 @@ namespace casnake.Game;
 
 public class SnakeTracker
 {
-    public int headTrackerY;
-    public int headTrackerX;
-    public int tailTrackerY;
-    public int tailTrackerX;
+    public int headTrackerY { get; private set; }
+    public int headTrackerX { get; private set; }
+    public int tailTrackerY { get; private set; }
+    public int tailTrackerX { get; private set; }
     private List<string> moveRegister;
  
     public SnakeTracker()
