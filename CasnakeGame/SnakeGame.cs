@@ -135,7 +135,6 @@ public class SnakeGame
         {
             _snakeMap.modifyActualCeil(_tracker.tailCoord.Y, _tracker.tailCoord.X, _gameComponents.Background);
             _tracker.trackTail(_snakeLenght);
-            // _tracker.trackTailSnake(_snakeLenght); 
         }
     }
 
