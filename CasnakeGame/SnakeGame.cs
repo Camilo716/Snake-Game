@@ -104,11 +104,9 @@ public class SnakeGame
         return _snakeMap.whatIsAhead(_actualMove, _tracker.headCoord.Y, _tracker.headCoord.X) == "collition";
     }
 
-
     private bool aheadThereIsAFruit()
     {        
-        bool aheadThereIsAFruit = _snakeMap.whatIsAhead(_actualMove, _tracker.headCoord.Y, _tracker.headCoord.X) == "fruit";
-        return aheadThereIsAFruit;
+        return _snakeMap.whatIsAhead(_actualMove, _tracker.headCoord.Y, _tracker.headCoord.X) == "fruit";
     }
 
     private void moveSnakeHead()
