@@ -1,9 +1,19 @@
+using casnake.CasnakeGame.Trackers;
+
 namespace casnake.CasnakeGame.Moves;
 
-public class MoverLeft : IMovable
+public class MoverLeft : SnakeMover
 {
-    public void MoveSnake()
+    public override Coord headCeilAheadCoords { get => new Coord(this._headCoords.X, this._headCoords.Y - 1);}
+
+    public override Coord tailCeilCoords { get => new Coord(this._tailCoords.X, this._tailCoords.Y); }
+
+    private Coord _headCoords;
+    private Coord _tailCoords;
+
+    public MoverLeft(Coord headCoords, Coord tailCoords)
     {
-        throw new NotImplementedException();
+        _headCoords = headCoords;
+        _tailCoords = tailCoords;
     }
 }

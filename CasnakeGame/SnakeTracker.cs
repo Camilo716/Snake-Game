@@ -1,7 +1,12 @@
+using casnake.CasnakeGame.Trackers;
+
 namespace casnake.Game;
 
 public class SnakeTracker
 {
+    public Coord headCoord;
+    public Coord tailCoord;
+
     public int headTrackerY { get; private set; }
     public int headTrackerX { get; private set; }
     public int tailTrackerY { get; private set; }
@@ -43,6 +48,34 @@ public class SnakeTracker
                 }
             }
         }
+    }
+
+    public void TrackSnakeForInitialMap(string[,] map, string head)
+    {
+        for (int row = 0; row < map.GetLength(0); row++)
+        {
+            for (int column = 0; column < map.GetLength(1); column++)
+            {
+                if (map[row,column] == head)
+                {
+                    this.headCoord = new Coord(column, row);
+                    this.tailCoord = new Coord(column-1, row);
+                }
+            }
+        }
+    }
+
+    public void trackHead(string direction)
+    {
+        var pointTracker = TrackerFactory.CreateTracker(direction);
+        pointTracker.TrackMove(ref headCoord);
+    }
+
+    public void trackTail(int bodyLength)
+    {
+        var direction = trackTailDirection(bodyLength);
+        var pointTracker = TrackerFactory.CreateTracker(direction);
+        pointTracker.TrackMove(ref headCoord);
     }
 
     public void trackHeadSnake(string direction,int headRow, int headColumn)

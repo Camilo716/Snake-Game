@@ -1,9 +1,19 @@
-namespace  casnake.CasnakeGame.Moves;
+using casnake.CasnakeGame.Trackers;
 
-public class MoverUp : IMovable
+namespace casnake.CasnakeGame.Moves;
+
+public class MoverUp : SnakeMover
 {
-    public void MoveSnake()
+    public override Coord headCeilAheadCoords { get => new Coord(this._headCoords.X, this._headCoords.Y - 1);}
+
+    public override Coord tailCeilCoords { get => new Coord(this._tailCoords.X, this._tailCoords.Y); }
+
+    private Coord _headCoords;
+    private Coord _tailCoords;
+
+    public MoverUp(Coord headCoords, Coord tailCoords)
     {
-        throw new NotImplementedException();
+        _headCoords = headCoords;
+        _tailCoords = tailCoords;
     }
 }

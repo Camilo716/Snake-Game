@@ -1,4 +1,7 @@
 namespace casnake.Game;
+
+using casnake.CasnakeGame.Moves;
+using casnake.CasnakeGame.Trackers;
 using casnake.SnakeUI;
 
 public class SnakeGame
@@ -49,10 +52,24 @@ public class SnakeGame
     }
 
     public void moveSnake()
-    {        
+    {
         bool fruitAhead = aheadThereIsAFruit();
 
-        moveSnakeHead(_actualMove);
+        moveSnakeHead();
+        moveSnakeBody(fruitAhead);
+    }
+
+    public void _moveSnake()
+    {
+        var headCoords = new Coord(_tracker.headTrackerX, _tracker.headTrackerY);
+        var tailCoords = new Coord(_tracker.tailTrackerX, _tracker.tailTrackerY);
+
+        SnakeMover mover = new MoverFactory(headCoords, tailCoords)
+                                                .CreateMover(_actualMove);
+
+        bool fruitAhead = aheadThereIsAFruit();
+
+        moveSnakeHead();
         moveSnakeBody(fruitAhead);
     }
     
@@ -61,6 +78,7 @@ public class SnakeGame
         _snakeMap.createInitialMap();
         _userInterface.drawGame(_snakeMap.map);
         _tracker.trackSnakeForInitialMap(_snakeMap.map, _gameComponents.SnakeHead);
+        _tracker.TrackSnakeForInitialMap(_snakeMap.map, _gameComponents.SnakeHead);
         _tracker.registMove("right");
     }
 
@@ -112,10 +130,12 @@ public class SnakeGame
         return aheadThereIsAFruit;
     }
 
-    private void moveSnakeHead(string direction)
+    private void moveSnakeHead()
     {
         _snakeMap.modifyActualCeil(_tracker.headTrackerY, _tracker.headTrackerX, _gameComponents.SnakeBody);
         _snakeMap.modifyCeilAhead(_actualMove, _tracker.headTrackerY, _tracker.headTrackerX, _gameComponents.SnakeHead);
+        
+        // _tracker.trackHead(_actualMove);
         _tracker.trackHeadSnake(_actualMove, _tracker.headTrackerY, _tracker.headTrackerX);
     }
 
