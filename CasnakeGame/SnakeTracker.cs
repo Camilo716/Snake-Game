@@ -78,50 +78,6 @@ public class SnakeTracker
         pointTracker.TrackMove(ref tailCoord);
     }
 
-    public void trackHeadSnake(string direction,int headRow, int headColumn)
-    {
-        switch (direction)
-        {
-            case "up":
-                headTrackerY = headTrackerY-1;
-                break;
-            case "down":
-                headTrackerY = headTrackerY+1;
-                break;
-            case "right":
-                headTrackerX = headTrackerX+1;
-                break;
-            case "left":
-                headTrackerX = headTrackerX-1;
-                break;     
-            default:
-                break;
-        }  
-    }
-
-    public void trackTailSnake(int bodyLength)
-    {
-        string tailDirectionToMove = trackTailDirection(bodyLength);
-
-        switch (tailDirectionToMove)
-        {
-            case "up":
-                tailTrackerY = tailTrackerY-1;
-                break;
-            case "down":
-                tailTrackerY = tailTrackerY+1;
-                break;
-            case "right":
-                tailTrackerX = tailTrackerX+1;
-                break;
-            case "left":
-                tailTrackerX = tailTrackerX-1;
-                break;     
-            default:
-                break;
-        }
-    }
-
     private string trackTailDirection(int bodyLength)
     {
         return moveRegister[moveRegister.Count()-bodyLength];

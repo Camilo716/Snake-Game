@@ -77,7 +77,6 @@ public class SnakeGame
     {
         _snakeMap.createInitialMap();
         _userInterface.drawGame(_snakeMap.map);
-        _tracker.trackSnakeForInitialMap(_snakeMap.map, _gameComponents.SnakeHead);
         _tracker.TrackSnakeForInitialMap(_snakeMap.map, _gameComponents.SnakeHead);
         _tracker.registMove("right");
     }
