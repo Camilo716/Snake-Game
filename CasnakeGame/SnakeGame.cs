@@ -91,9 +91,7 @@ public class SnakeGame
 
     private bool WasAValidMovement()
     {
-        bool validMove = _tracker.getLastMove() != "error";
-        
-        return validMove;
+        return  _tracker.getLastMove() != "error";
     }
 
     public void setActualMove()
