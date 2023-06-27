@@ -92,7 +92,7 @@ public class Tests
         var game = new SnakeGame(userInterface, SMap);
 
         game._snakeMap.createInitialMap();
-        game._tracker.trackSnakeForInitialMap(game._snakeMap.map, _gameComponents.SnakeHead);
+        game._tracker.TrackSnakeForInitialMap(game._snakeMap.map, _gameComponents.SnakeHead);
         game._tracker.registMove("right");
 
         return game;

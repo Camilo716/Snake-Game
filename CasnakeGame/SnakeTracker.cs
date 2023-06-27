@@ -33,23 +33,6 @@ public class SnakeTracker
         return moveRegister.Last();
     }
 
-    public void trackSnakeForInitialMap(string[,] map, string head)
-    {
-        for (int row = 0; row < map.GetLength(0); row++)
-        {
-            for (int column = 0; column < map.GetLength(1); column++)
-            {
-                if (map[row,column] == head)
-                {
-                    headTrackerY = row;
-                    headTrackerX = column;
-                    tailTrackerY = row;
-                    tailTrackerX = column-1;
-                }
-            }
-        }
-    }
-
     public void TrackSnakeForInitialMap(string[,] map, string head)
     {
         for (int row = 0; row < map.GetLength(0); row++)
