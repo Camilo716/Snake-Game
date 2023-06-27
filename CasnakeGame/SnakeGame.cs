@@ -118,7 +118,7 @@ public class SnakeGame
 
     private bool PlayerCrashed()
     {        
-        bool playerCrashed = _snakeMap.whatIsAhead(_actualMove, _tracker.headTrackerY, _tracker.headTrackerX) == "collition";
+        bool playerCrashed = _snakeMap.whatIsAhead(_actualMove, _tracker.headCoord.Y, _tracker.headCoord.X) == "collition";
 
         return playerCrashed;
     }
@@ -132,11 +132,11 @@ public class SnakeGame
 
     private void moveSnakeHead()
     {
-        _snakeMap.modifyActualCeil(_tracker.headTrackerY, _tracker.headTrackerX, _gameComponents.SnakeBody);
-        _snakeMap.modifyCeilAhead(_actualMove, _tracker.headTrackerY, _tracker.headTrackerX, _gameComponents.SnakeHead);
+        _snakeMap.modifyActualCeil(_tracker.headCoord.Y, _tracker.headCoord.X, _gameComponents.SnakeBody);
+        _snakeMap.modifyCeilAhead(_actualMove, _tracker.headCoord.Y , _tracker.headCoord.X, _gameComponents.SnakeHead);
         
-        // _tracker.trackHead(_actualMove);
-        _tracker.trackHeadSnake(_actualMove, _tracker.headTrackerY, _tracker.headTrackerX);
+        _tracker.trackHead(_actualMove);
+        // _tracker.trackHeadSnake(_actualMove, _tracker.headTrackerY, _tracker.headTrackerX);
     }
 
 
