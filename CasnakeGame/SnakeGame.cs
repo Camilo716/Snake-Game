@@ -7,7 +7,7 @@ using casnake.SnakeUI;
 public class SnakeGame
 {
     public SnakeMap _snakeMap;
-    public SnakeTracker _tracker;
+    public SnakeTracer _tracker;
     private string _actualMove = "right";
     private int _snakeLenght = 2;
     private ISnakeUI _userInterface;
@@ -18,7 +18,7 @@ public class SnakeGame
     {
         this._userInterface = _userInterface;
         this._snakeMap = _snakeMap;
-        this._tracker = new SnakeTracker();
+        this._tracker = new SnakeTracer();
 
         _gameComponents = new ConsoleGameComponents();
     }
@@ -121,7 +121,6 @@ public class SnakeGame
         _snakeMap.modifyCeilAhead(_actualMove, _tracker.headCoord.Y , _tracker.headCoord.X, _gameComponents.SnakeHead);
         
         _tracker.trackHead(_actualMove);
-        // _tracker.trackHeadSnake(_actualMove, _tracker.headTrackerY, _tracker.headTrackerX);
     }
 
 

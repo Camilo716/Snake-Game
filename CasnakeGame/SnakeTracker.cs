@@ -2,13 +2,13 @@ using casnake.CasnakeGame.Trackers;
 
 namespace casnake.Game;
 
-public class SnakeTracker
+public class SnakeTracer
 {
     public Coord headCoord;
     public Coord tailCoord;
     private List<string> moveRegister;
  
-    public SnakeTracker()
+    public SnakeTracer()
     {
         this.moveRegister = new List<string>();
     }
