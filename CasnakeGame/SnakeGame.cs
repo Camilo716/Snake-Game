@@ -101,9 +101,7 @@ public class SnakeGame
 
     private bool PlayerCrashed()
     {        
-        bool playerCrashed = _snakeMap.whatIsAhead(_actualMove, _tracker.headCoord.Y, _tracker.headCoord.X) == "collition";
-
-        return playerCrashed;
+        return _snakeMap.whatIsAhead(_actualMove, _tracker.headCoord.Y, _tracker.headCoord.X) == "collition";
     }
 
 
