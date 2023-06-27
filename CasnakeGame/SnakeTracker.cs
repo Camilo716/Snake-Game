@@ -6,11 +6,6 @@ public class SnakeTracker
 {
     public Coord headCoord;
     public Coord tailCoord;
-
-    public int headTrackerY { get; private set; }
-    public int headTrackerX { get; private set; }
-    public int tailTrackerY { get; private set; }
-    public int tailTrackerX { get; private set; }
     private List<string> moveRegister;
  
     public SnakeTracker()
@@ -64,14 +59,5 @@ public class SnakeTracker
     private string trackTailDirection(int bodyLength)
     {
         return moveRegister[moveRegister.Count()-bodyLength];
-    }
-
-    private string controlTrack(string tileDirection, int score)
-    {
-        return
-            "Head:\t" + headTrackerY + ", " + headTrackerX+ "\n" +
-            "Tail:\t" + tailTrackerY + ", " + tailTrackerX + "\n" +
-            "TailDirectionToMove:" + tileDirection + "\n" +
-            "BodyLenght:" + score;
     }
 }

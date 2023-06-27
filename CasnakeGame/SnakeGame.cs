@@ -59,20 +59,6 @@ public class SnakeGame
         moveSnakeBody(fruitAhead);
     }
 
-    public void _moveSnake()
-    {
-        var headCoords = new Coord(_tracker.headTrackerX, _tracker.headTrackerY);
-        var tailCoords = new Coord(_tracker.tailTrackerX, _tracker.tailTrackerY);
-
-        SnakeMover mover = new MoverFactory(headCoords, tailCoords)
-                                                .CreateMover(_actualMove);
-
-        bool fruitAhead = aheadThereIsAFruit();
-
-        moveSnakeHead();
-        moveSnakeBody(fruitAhead);
-    }
-    
     private void startGame()
     {
         _snakeMap.createInitialMap();
