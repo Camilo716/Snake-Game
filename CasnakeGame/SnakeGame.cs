@@ -126,7 +126,7 @@ public class SnakeGame
 
     private bool aheadThereIsAFruit()
     {        
-        bool aheadThereIsAFruit = _snakeMap.whatIsAhead(_actualMove, _tracker.headTrackerY, _tracker.headTrackerX) == "fruit";
+        bool aheadThereIsAFruit = _snakeMap.whatIsAhead(_actualMove, _tracker.headCoord.Y, _tracker.headCoord.X) == "fruit";
         return aheadThereIsAFruit;
     }
 
@@ -149,8 +149,9 @@ public class SnakeGame
         }
         else
         {
-            _snakeMap.modifyActualCeil(_tracker.tailTrackerY, _tracker.tailTrackerX, _gameComponents.Background);
-            _tracker.trackTailSnake(_snakeLenght); 
+            _snakeMap.modifyActualCeil(_tracker.tailCoord.Y, _tracker.tailCoord.X, _gameComponents.Background);
+            _tracker.trackTail(_snakeLenght);
+            // _tracker.trackTailSnake(_snakeLenght); 
         }
     }
 

@@ -75,7 +75,7 @@ public class SnakeTracker
     {
         var direction = trackTailDirection(bodyLength);
         var pointTracker = TrackerFactory.CreateTracker(direction);
-        pointTracker.TrackMove(ref headCoord);
+        pointTracker.TrackMove(ref tailCoord);
     }
 
     public void trackHeadSnake(string direction,int headRow, int headColumn)
