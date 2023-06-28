@@ -9,21 +9,36 @@ public class SnakeMovesTests
 {
     SnakeUIStub _UIStub = new SnakeUIStub();
 
-    [Test]
-    public void validate_move_to_the_right()
-    {
-        var mover = CreateMover("right");
-        var map = new SnakeMap(5,8);
-        map.createInitialMap();
-
-        var updatedMap = mover.MoveSnake(map);
-
-        string mapExpected =
+    const string MoveToRightExpected = 
             "********\n"+
             "*      *\n"+
             "* 0@#  *\n"+
             "*      *\n"+
             "********\n";
+    const string MoveUpExpected = 
+            "********\n"+
+            "* @    *\n"+
+            "* 0 #  *\n"+
+            "*      *\n"+
+            "********\n";
+    const string MoveDownExpected =
+            "********\n"+
+            "*      *\n"+
+            "* 0 #  *\n"+
+            "* @    *\n"+
+            "********\n";
+
+    [TestCase("right", MoveToRightExpected)]
+    [TestCase("up", MoveUpExpected)]
+    [TestCase("down", MoveDownExpected)]
+    public void validate_move_to_the_right(string direction, string mapExpected)
+    {
+        var mover = CreateMover(direction);
+        var map = new SnakeMap(5,8);
+        map.createInitialMap();
+
+        var updatedMap = mover.MoveSnake(map);
+
         var ExpectedBidimensionalMap = ConvertStringMapToBidimensionalMap(mapExpected);
         Assert.That(updatedMap.map, Is.EqualTo(ExpectedBidimensionalMap));
     }
