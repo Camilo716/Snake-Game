@@ -30,7 +30,7 @@ public class MoverFactory
                 return new MoverLeft(_headCoords, _tailCoords);
 
             default:
-                return new MoverError();
+                return new MoverError(_headCoords, _tailCoords);
        }      
     }
 }

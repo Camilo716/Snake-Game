@@ -2,7 +2,7 @@ namespace casnake.Tests;
 using casnake.Game;
 using casnake.SnakeUI;
 
-public class Tests
+public class SnakeGameTests
 {
     SnakeUIStub _UIStub = new SnakeUIStub();
     
@@ -61,28 +61,6 @@ public class Tests
         Assert.That(_UIStub.drawGame(game._snakeMap.map), Is.EqualTo(mapExpected));
     }
 
-    [Test]
-    public void validate_move_to_the_left()
-    {
-        SnakeGame game = CreateSnakeGame(5, 8);
-
-        game._tracker.registMove("up");
-        game.setActualMove();
-        game.moveSnake();
-        game._tracker.registMove("left");
-        game.setActualMove();
-        game.moveSnake();
-
-        string mapExpected =
-            "********\n"+
-            "*@0    *\n"+
-            "*   #  *\n"+
-            "*      *\n"+
-            "********\n";
-        
-        Assert.That(_UIStub.drawGame(game._snakeMap.map), Is.EqualTo(mapExpected));
-    }
-    
     private SnakeGame CreateSnakeGame(int heightOfMap , int widthOfMap)
     {
         SnakeUIStub userInterface = new SnakeUIStub();

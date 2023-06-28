@@ -4,12 +4,7 @@ namespace casnake.CasnakeGame.Moves;
 
 public class MoverError : SnakeMover
 {
-    public override Coord headCeilAheadCoords => throw new NotImplementedException();
+    protected override Coord headCeilAheadCoords => throw new NotImplementedException();
+    public MoverError(Coord headCoords, Coord tailCoords) : base(headCoords, tailCoords) { }
 
-    public override Coord tailCeilCoords => throw new NotImplementedException();
-
-    public void MoveSnake()
-    {
-        throw new NotImplementedException();
-    }
 }

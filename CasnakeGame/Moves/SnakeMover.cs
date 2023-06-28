@@ -8,30 +8,43 @@ namespace casnake.CasnakeGame.Moves;
 public abstract class SnakeMover
 {
     private IGameComponentsUI gameComponents =  new ConsoleGameComponents();    
-    public abstract Coord headCeilAheadCoords { get; }
-    public abstract Coord tailCeilCoords { get; }
+    protected abstract Coord headCeilAheadCoords { get; }
+
+    protected Coord _headCoords;
+    protected Coord _tailCoords;
+
+    public SnakeMover(Coord headCoords, Coord tailCoords)
+    {
+        _headCoords = headCoords;
+        _tailCoords = tailCoords;
+    }
 
     public SnakeMap MoveSnake(SnakeMap gameMap)
     {
-        MoveHead(gameMap);
-        MoveTail(gameMap);
+        SnakeMap withHeadUpdated = MoveHead(gameMap);
+        SnakeMap withBodyUpdated = MoveBody(gameMap);
 
         return gameMap;
     }
 
     private SnakeMap MoveHead(SnakeMap gameMap)
     {
-        
         gameMap.map[headCeilAheadCoords.Y, headCeilAheadCoords.X] = gameComponents.SnakeHead;
 
         return gameMap;
     }
 
-    private SnakeMap MoveTail(SnakeMap gameMap)
+    private SnakeMap MoveBody(SnakeMap gameMap)
     {
-        if (!FruitAhead(gameMap))
-            gameMap.map[tailCeilCoords.Y, tailCeilCoords.X] = gameComponents.Background;
-
+        if (FruitAhead(gameMap))
+        {
+            gameMap.generateFruit();
+        }
+        else
+        {
+            gameMap.map[_tailCoords.Y, _tailCoords.X] = gameComponents.Background;   
+            gameMap.map[_headCoords.Y, _headCoords.X] = gameComponents.SnakeBody;
+        }
         return gameMap;
     }
 
