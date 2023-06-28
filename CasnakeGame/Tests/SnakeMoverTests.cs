@@ -3,7 +3,6 @@ namespace casnake.Tests;
 using casnake.CasnakeGame.Moves;
 using casnake.CasnakeGame.Trackers;
 using casnake.Game;
-using casnake.SnakeUI;
 
 public class SnakeMovesTests
 {
