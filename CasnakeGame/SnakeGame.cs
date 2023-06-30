@@ -115,17 +115,9 @@ public class SnakeGame
     private bool snakeAte(string[,] map)
     {
         int lenghtCounter = 1;
-
-        for (int row = 0; row < map.GetLength(0); row++)
-        {
-            for (int column = 0; column < map.GetLength(1); column++)
-            {
-                if (map[row,column] == "0")
-                {
-                    lenghtCounter++;
-                }
-            }
-        }
+        lenghtCounter += map
+                            .Cast<String>()
+                            .Count(ceil => ceil == "0");
 
         return lenghtCounter > _snakeLenght;
     }
