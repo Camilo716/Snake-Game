@@ -51,19 +51,9 @@ public class SnakeGame
     {
         var factory = new MoverFactory(_tracker.headCoord, _tracker.tailCoord);
         SnakeMover mover = factory.CreateMover(_tracker.getLastMove());
-
         TryMoveSnake(mover);
-
-        _tracker.trackHead(_tracker.getLastMove());
-
-        if (snakeAte(_snakeMap.map))
-        {
-            _snakeLenght++;
-        }
-        else
-        {
-            _tracker.trackTail(_snakeLenght);
-        }
+        
+        TraceMadeMove();
     }
 
     private void TryMoveSnake(SnakeMover mover)
@@ -75,6 +65,20 @@ public class SnakeGame
         catch (SnakeCrashedException)
         {  
             _playerCrashed = true;
+        }
+    }
+
+    private void TraceMadeMove()
+    {
+        _tracker.trackHead(_tracker.getLastMove());
+
+        if (snakeAte(_snakeMap.map))
+        {
+            _snakeLenght++;
+        }
+        else
+        {
+            _tracker.trackTail(_snakeLenght);
         }
     }
 
