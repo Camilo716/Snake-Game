@@ -1,8 +1,8 @@
-namespace casnake.Tests;
-
 using casnake.CasnakeGame.Moves;
 using casnake.CasnakeGame.Trackers;
 using casnake.Game;
+
+namespace casnake.Tests;
 
 public class SnakeMovesTests
 {

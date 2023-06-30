@@ -7,7 +7,7 @@ namespace casnake.CasnakeGame.Moves;
 
 public abstract class SnakeMover
 {
-    private IGameComponentsUI gameComponents =  new ConsoleGameComponents();    
+    private IGameComponentsUI gameComponents = new ConsoleGameComponents();    
     protected abstract Coord headCeilAheadCoords { get; }
 
     protected Coord _headCoords;
@@ -21,35 +21,40 @@ public abstract class SnakeMover
 
     public SnakeMap MoveSnake(SnakeMap gameMap)
     {
+        var fruitAhead = FruitAhead(gameMap);
+
         SnakeMap withHeadUpdated = MoveHead(gameMap);
-        SnakeMap withBodyUpdated = MoveBody(gameMap);
 
-        return gameMap;
-    }
-
-    private SnakeMap MoveHead(SnakeMap gameMap)
-    {
-        gameMap.map[headCeilAheadCoords.Y, headCeilAheadCoords.X] = gameComponents.SnakeHead;
-
-        return gameMap;
-    }
-
-    private SnakeMap MoveBody(SnakeMap gameMap)
-    {
-        if (FruitAhead(gameMap))
+        if (fruitAhead)
         {
             gameMap.generateFruit();
         }
         else
         {
-            gameMap.map[_tailCoords.Y, _tailCoords.X] = gameComponents.Background;   
-            gameMap.map[_headCoords.Y, _headCoords.X] = gameComponents.SnakeBody;
+            SnakeMap withBodyUpdated = MoveBody(gameMap);
         }
+
+        return  gameMap;
+    }
+
+    private SnakeMap MoveHead(SnakeMap gameMap)
+    {
+        gameMap.map[headCeilAheadCoords.Y, headCeilAheadCoords.X] = gameComponents.SnakeHead;
+        gameMap.map[_headCoords.Y, _headCoords.X] = gameComponents.SnakeBody;
+        return gameMap;
+    }
+
+    private SnakeMap MoveBody(SnakeMap gameMap)
+    {
+        gameMap.map[_tailCoords.Y, _tailCoords.X] = gameComponents.Background;   
+        gameMap.map[_headCoords.Y, _headCoords.X] = gameComponents.SnakeBody;
+        
         return gameMap;
     }
 
     private bool FruitAhead(SnakeMap gameMap)
     {
-        return gameMap.map[headCeilAheadCoords.Y, headCeilAheadCoords.X] == gameComponents.Fruit;
+        var ceilAhead = gameMap.map[headCeilAheadCoords.Y, headCeilAheadCoords.X];
+        return ceilAhead == gameComponents.Fruit;
     }
 }

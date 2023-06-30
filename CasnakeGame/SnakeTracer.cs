@@ -6,6 +6,7 @@ public class SnakeTracer
 {
     public Coord headCoord;
     public Coord tailCoord;
+
     private List<string> moveRegister;
  
     public SnakeTracer()

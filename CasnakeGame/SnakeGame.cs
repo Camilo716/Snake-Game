@@ -46,7 +46,7 @@ public class SnakeGame
                 return;
             }
             
-            moveSnake();
+            MoveSnake();
             _userInterface.drawGame(_snakeMap.map);
         }  
     }
@@ -57,6 +57,42 @@ public class SnakeGame
 
         moveSnakeHead();
         moveSnakeBody(fruitAhead);
+    }
+
+    public void MoveSnake()
+    {
+        var factory = new MoverFactory(_tracker.headCoord, _tracker.tailCoord);
+        SnakeMover mover = factory.CreateMover(_actualMove);
+        _snakeMap = mover.MoveSnake(_snakeMap);    
+
+        _tracker.trackHead(_actualMove);
+
+        if (snakeAte(_snakeMap.map))
+        {
+            _snakeLenght++;
+        }
+        else
+        {
+            _tracker.trackTail(_snakeLenght);
+        }
+    }
+
+    private bool snakeAte(string[,] map)
+    {
+        int lenghtCounter = 1;
+
+        for (int row = 0; row < map.GetLength(0); row++)
+        {
+            for (int column = 0; column < map.GetLength(1); column++)
+            {
+                if (map[row,column] == "0")
+                {
+                    lenghtCounter++;
+                }
+            }
+        }
+
+        return lenghtCounter > _snakeLenght;
     }
 
     private void startGame()
