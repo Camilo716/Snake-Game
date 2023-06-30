@@ -6,8 +6,8 @@ using casnake.SnakeUI;
 
 public class SnakeGame
 {
-    public SnakeMap _snakeMap;
-    public SnakeTracer _tracker;
+    private SnakeMap _snakeMap;
+    private SnakeTracker _tracker;
     private int _snakeLenght = 2;
     private ISnakeUI _userInterface;
     private IGameComponentsUI  _gameComponents;
@@ -17,7 +17,7 @@ public class SnakeGame
     {
         this._userInterface = _userInterface;
         this._snakeMap = _snakeMap;
-        this._tracker = new SnakeTracer();
+        this._tracker = new SnakeTracker();
 
         _gameComponents = new ConsoleGameComponents();
     }

@@ -1,15 +1,13 @@
-using casnake.CasnakeGame.Trackers;
+namespace casnake.CasnakeGame.Trackers;
 
-namespace casnake.Game;
-
-public class SnakeTracer
+public class SnakeTracker
 {
     public Coord headCoord;
     public Coord tailCoord;
 
     private List<string> moveRegister;
  
-    public SnakeTracer()
+    public SnakeTracker()
     {
         this.moveRegister = new List<string>();
     }
@@ -52,12 +50,12 @@ public class SnakeTracer
 
     public void trackTail(int bodyLength)
     {
-        var direction = trackTailDirection(bodyLength);
+        var direction = GetTailDirection(bodyLength);
         var pointTracker = TrackerFactory.CreateTracker(direction);
         pointTracker.TrackMove(ref tailCoord);
     }
 
-    private string trackTailDirection(int bodyLength)
+    private string GetTailDirection(int bodyLength)
     {
         return moveRegister[moveRegister.Count()-bodyLength];
     }
