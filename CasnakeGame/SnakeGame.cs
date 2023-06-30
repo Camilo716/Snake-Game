@@ -29,6 +29,14 @@ public class SnakeGame
         _userInterface.writeMessage($"-------------\nYOU CRASHED!\nScore: {_snakeLenght}\n-------------");
     }
 
+    private void startGame()
+    {
+        _snakeMap.createInitialMap();
+        _userInterface.drawGame(_snakeMap.map);
+        _tracker.TrackSnakeForInitialMap(_snakeMap.map, _gameComponents.SnakeHead);
+        _tracker.registMove("right");
+    }
+
     private void IterateGame()
     {
         while (!_playerCrashed)
@@ -45,6 +53,28 @@ public class SnakeGame
             MakeMove();
             _userInterface.drawGame(_snakeMap.map);
         }  
+    }
+
+    private void registNextMove(string moveToDo)
+    {        
+        switch (moveToDo)
+        {
+            case "w":
+                _tracker.registMove("up");
+                break;
+            case "a":
+                _tracker.registMove("left");
+                break;
+            case "s":
+                _tracker.registMove("down");
+                break;
+            case "d":
+                _tracker.registMove("right");
+                break;
+            default:
+                _tracker.registMove("error");
+                break;
+        }
     }
 
     private void MakeMove()
@@ -98,36 +128,6 @@ public class SnakeGame
         }
 
         return lenghtCounter > _snakeLenght;
-    }
-
-    private void startGame()
-    {
-        _snakeMap.createInitialMap();
-        _userInterface.drawGame(_snakeMap.map);
-        _tracker.TrackSnakeForInitialMap(_snakeMap.map, _gameComponents.SnakeHead);
-        _tracker.registMove("right");
-    }
-
-    private void registNextMove(string moveToDo)
-    {        
-        switch (moveToDo)
-        {
-            case "w":
-                _tracker.registMove("up");
-                break;
-            case "a":
-                _tracker.registMove("left");
-                break;
-            case "s":
-                _tracker.registMove("down");
-                break;
-            case "d":
-                _tracker.registMove("right");
-                break;
-            default:
-                _tracker.registMove("error");
-                break;
-        }
     }
 
     private bool WasAValidMovement()
