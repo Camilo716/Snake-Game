@@ -51,14 +51,6 @@ public class SnakeGame
         }  
     }
 
-    public void moveSnake()
-    {
-        bool fruitAhead = aheadThereIsAFruit();
-
-        moveSnakeHead();
-        moveSnakeBody(fruitAhead);
-    }
-
     public void MoveSnake()
     {
         var factory = new MoverFactory(_tracker.headCoord, _tracker.tailCoord);
@@ -138,34 +130,6 @@ public class SnakeGame
     private bool PlayerCrashed()
     {        
         return _snakeMap.whatIsAhead(_actualMove, _tracker.headCoord.Y, _tracker.headCoord.X) == "collition";
-    }
-
-    private bool aheadThereIsAFruit()
-    {        
-        return _snakeMap.whatIsAhead(_actualMove, _tracker.headCoord.Y, _tracker.headCoord.X) == "fruit";
-    }
-
-    private void moveSnakeHead()
-    {
-        _snakeMap.modifyActualCeil(_tracker.headCoord.Y, _tracker.headCoord.X, _gameComponents.SnakeBody);
-        _snakeMap.modifyCeilAhead(_actualMove, _tracker.headCoord.Y , _tracker.headCoord.X, _gameComponents.SnakeHead);
-        
-        _tracker.trackHead(_actualMove);
-    }
-
-
-    private void moveSnakeBody(bool aheadThereIsAFruit)
-    {
-        if (aheadThereIsAFruit)
-        {
-            _snakeMap.generateFruit();
-            _snakeLenght+=1;
-        }
-        else
-        {
-            _snakeMap.modifyActualCeil(_tracker.tailCoord.Y, _tracker.tailCoord.X, _gameComponents.Background);
-            _tracker.trackTail(_snakeLenght);
-        }
     }
 
     private void finishGame()

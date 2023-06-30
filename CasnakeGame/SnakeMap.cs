@@ -37,20 +37,20 @@ public class SnakeMap
 
                 if (place_to_create_snake)
                 {
-                    modifyActualCeil(row,column, _gameComponents.SnakeHead);
-                    modifyCeilAhead("left", row, column, _gameComponents.SnakeBody);
+                    map[row,column] = _gameComponents.SnakeHead;
+                    map[row,column-1] = _gameComponents.SnakeBody;
                 }
                 else if (middle_of_map)
                 {
-                    modifyActualCeil(row,column, _gameComponents.Fruit);
+                    map[row,column] = _gameComponents.Fruit;
                 }
                 else if (vertical_border_of_map || horizonal_border_of_map)
                 {
-                    modifyActualCeil(row,column, _gameComponents.BorderMap);
+                    map[row,column] = _gameComponents.BorderMap;
                 }
                 else
                 {
-                    modifyActualCeil(row,column, _gameComponents.Background);
+                    map[row,column] = _gameComponents.Background;
                 }
             }
         }
@@ -63,40 +63,14 @@ public class SnakeMap
             int rowNewFruit = _math.randomNumberForRow(maxIndexRow);
             int columnNewFruit = _math.randomNumberForColumn(maxIndexColumn);
 
-            bool placeWithoutAnotherEntities = map[rowNewFruit, columnNewFruit] == _gameComponents.Background;
+            bool placeWithoutAnotherComponents = map[rowNewFruit, columnNewFruit] == _gameComponents.Background;
 
-            if (placeWithoutAnotherEntities)
+            if (placeWithoutAnotherComponents)
             {
-                modifyActualCeil(rowNewFruit,columnNewFruit, _gameComponents.Fruit);
+                map[rowNewFruit, columnNewFruit] = _gameComponents.Fruit;
                 break;
             }
         }
-    }
-
-    public void modifyActualCeil(int row, int column, string gameComponentToPut)
-    {
-        map[row,column] = gameComponentToPut;
-    }
-
-    public void modifyCeilAhead(string direction, int row, int column, string gameComponentToPut)
-    {
-        switch (direction)
-        {
-            case "up":
-                map[row-1,column] = gameComponentToPut;
-                break;
-            case "down":
-                map[row+1,column] = gameComponentToPut;
-                break;
-            case "right":
-                map[row,column+1] = gameComponentToPut;
-                break;
-            case "left":
-                map[row,column-1] = gameComponentToPut;
-                break;
-            default:
-                break;
-       }      
     }
 
     public string whatIsAhead(string direction, int row,int column)
