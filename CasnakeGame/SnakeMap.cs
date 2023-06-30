@@ -57,8 +57,8 @@ public class SnakeMap
     {
         while (true)
         {
-            int rowNewFruit = SnakeMath.randomNumberForRow(maxIndexRow);
-            int columnNewFruit = SnakeMath.randomNumberForColumn(maxIndexColumn);
+            int rowNewFruit = SnakeMath.randomNumber(maxIndexRow);
+            int columnNewFruit = SnakeMath.randomNumber(maxIndexColumn);
 
             bool placeWithoutAnotherComponents = map[rowNewFruit, columnNewFruit] == _gameComponents.Background;
 

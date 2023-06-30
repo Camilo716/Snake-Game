@@ -6,18 +6,11 @@ public static class SnakeMath
         return Convert.ToInt32(Math.Floor(val));
     }
 
-    static public int randomNumberForRow(int maxIndexRow)
+    static public int randomNumber(int maxNumber)
     {
         var randomNumber = new Random();
 
-        return randomNumber.Next(1, maxIndexRow-1);
-    }
-    
-    static public int randomNumberForColumn(int maxIndexColumn)
-    {
-        var randomNumber = new Random();
-
-        return  randomNumber.Next(1, maxIndexColumn-1);
+        return randomNumber.Next(1, maxNumber-1);
     }
 }
 
