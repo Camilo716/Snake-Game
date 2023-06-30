@@ -8,7 +8,6 @@ public class SnakeGame
 {
     public SnakeMap _snakeMap;
     public SnakeTracer _tracker;
-    private string _actualMove = "right";
     private int _snakeLenght = 2;
     private ISnakeUI _userInterface;
     private IGameComponentsUI  _gameComponents;
@@ -38,8 +37,6 @@ public class SnakeGame
                 continue;
             }
 
-            setActualMove();
-
             MoveSnake();
             _userInterface.drawGame(_snakeMap.map);
         }  
@@ -50,7 +47,7 @@ public class SnakeGame
     private void MoveSnake()
     {
         var factory = new MoverFactory(_tracker.headCoord, _tracker.tailCoord);
-        SnakeMover mover = factory.CreateMover(_actualMove);
+        SnakeMover mover = factory.CreateMover(_tracker.getLastMove());
 
         try
         {
@@ -61,7 +58,7 @@ public class SnakeGame
             _playerCrashed = true;
         }
 
-        _tracker.trackHead(_actualMove);
+        _tracker.trackHead(_tracker.getLastMove());
 
         if (snakeAte(_snakeMap.map))
         {
@@ -124,10 +121,5 @@ public class SnakeGame
     private bool WasAValidMovement()
     {
         return  _tracker.getLastMove() != "error";
-    }
-
-    public void setActualMove()
-    {
-        _actualMove = _tracker.getLastMove();
     }
 }
