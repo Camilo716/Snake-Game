@@ -25,7 +25,12 @@ public class SnakeGame
     public void playGame()
     {
         startGame();
+        IterateGame();
+        _userInterface.writeMessage($"-------------\nYOU CRASHED!\nScore: {_snakeLenght}\n-------------");
+    }
 
+    private void IterateGame()
+    {
         while (!_playerCrashed)
         {
             string moveToDo = _userInterface.readNextMove();
@@ -40,8 +45,6 @@ public class SnakeGame
             MoveSnake();
             _userInterface.drawGame(_snakeMap.map);
         }  
-
-        _userInterface.writeMessage($"-------------\nYOU CRASHED!\nScore: {_snakeLenght}\n-------------");
     }
 
     private void MoveSnake()
