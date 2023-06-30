@@ -42,24 +42,17 @@ public class SnakeGame
                 continue;
             }
 
-            MoveSnake();
+            MakeMove();
             _userInterface.drawGame(_snakeMap.map);
         }  
     }
 
-    private void MoveSnake()
+    private void MakeMove()
     {
         var factory = new MoverFactory(_tracker.headCoord, _tracker.tailCoord);
         SnakeMover mover = factory.CreateMover(_tracker.getLastMove());
 
-        try
-        {
-            _snakeMap = mover.MoveSnake(_snakeMap);    
-        }
-        catch (SnakeCrashedException)
-        {  
-            _playerCrashed = true;
-        }
+        TryMoveSnake(mover);
 
         _tracker.trackHead(_tracker.getLastMove());
 
@@ -70,6 +63,18 @@ public class SnakeGame
         else
         {
             _tracker.trackTail(_snakeLenght);
+        }
+    }
+
+    private void TryMoveSnake(SnakeMover mover)
+    {
+        try
+        {
+            _snakeMap = mover.MoveSnake(_snakeMap);    
+        }
+        catch (SnakeCrashedException)
+        {  
+            _playerCrashed = true;
         }
     }
 
