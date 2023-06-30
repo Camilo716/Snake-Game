@@ -4,12 +4,10 @@ using casnake.SnakeUI;
 public class SnakeMap
 {
     public string[,] map;
-    private SnakeMath _math;
     private int heightOfMap; // Rows
     private int widthOfMap;  // Columns
     private int maxIndexRow;
     private int maxIndexColumn;
-    private string? ceilAhead;
     private IGameComponentsUI _gameComponents;
 
 
@@ -20,7 +18,6 @@ public class SnakeMap
         this.map = new string[heightOfMap,widthOfMap];
         this.maxIndexRow = this.map.GetLength(0);
         this.maxIndexColumn = this.map.GetLength(1);
-        this._math = new SnakeMath();
         _gameComponents = new ConsoleGameComponents();
     }
 
@@ -30,8 +27,8 @@ public class SnakeMap
         {
             for (int column = 0; column < maxIndexColumn; column++)
             {
-                bool place_to_create_snake = row == _math.round(maxIndexRow/2) && column == 2;
-                bool middle_of_map = row == _math.round(maxIndexRow/2) && column == _math.round(maxIndexColumn/2);
+                bool place_to_create_snake = row == SnakeMath.round(maxIndexRow/2) && column == 2;
+                bool middle_of_map = row == SnakeMath.round(maxIndexRow/2) && column == SnakeMath.round(maxIndexColumn/2);
                 bool vertical_border_of_map = row == 0 || row == maxIndexRow-1;
                 bool horizonal_border_of_map = column == 0 || column == maxIndexColumn-1;
 
@@ -60,8 +57,8 @@ public class SnakeMap
     {
         while (true)
         {
-            int rowNewFruit = _math.randomNumberForRow(maxIndexRow);
-            int columnNewFruit = _math.randomNumberForColumn(maxIndexColumn);
+            int rowNewFruit = SnakeMath.randomNumberForRow(maxIndexRow);
+            int columnNewFruit = SnakeMath.randomNumberForColumn(maxIndexColumn);
 
             bool placeWithoutAnotherComponents = map[rowNewFruit, columnNewFruit] == _gameComponents.Background;
 
@@ -71,37 +68,5 @@ public class SnakeMap
                 break;
             }
         }
-    }
-
-    public string whatIsAhead(string direction, int row,int column)
-    {
-        ceilAhead = getCeilAhead(direction,row,column);
-
-        if (ceilAhead == _gameComponents.BorderMap || ceilAhead == _gameComponents.SnakeBody)
-        {
-            return "collition";
-        }
-        else if (ceilAhead == _gameComponents.Fruit)
-        {
-            return "fruit";       
-        }
-        return "";
-    }
-
-    private string getCeilAhead(string direction, int row, int column)
-    {
-        switch (direction)
-        {
-            case "up":
-                return map[row-1,column];
-            case "down":
-                return map[row+1,column];
-            case "right":
-                return map[row,column+1];
-            case "left":
-                return map[row,column-1];     
-            default:
-                return "";
-       }   
     }
 }

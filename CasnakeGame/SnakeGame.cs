@@ -12,7 +12,7 @@ public class SnakeGame
     private int _snakeLenght = 2;
     private ISnakeUI _userInterface;
     private IGameComponentsUI  _gameComponents;
-
+    private bool _playerCrashed = false;
 
     public SnakeGame(ISnakeUI _userInterface, SnakeMap _snakeMap)
     {
@@ -27,7 +27,7 @@ public class SnakeGame
     {
         startGame();
 
-        while (true)
+        while (!_playerCrashed)
         {
             string moveToDo = _userInterface.readNextMove();
             registNextMove(moveToDo);
@@ -40,22 +40,26 @@ public class SnakeGame
 
             setActualMove();
 
-            if (PlayerCrashed())
-            {
-                finishGame();
-                return;
-            }
-            
             MoveSnake();
             _userInterface.drawGame(_snakeMap.map);
         }  
+
+        _userInterface.writeMessage($"-------------\nYOU CRASHED!\nScore: {_snakeLenght}\n-------------");
     }
 
-    public void MoveSnake()
+    private void MoveSnake()
     {
         var factory = new MoverFactory(_tracker.headCoord, _tracker.tailCoord);
         SnakeMover mover = factory.CreateMover(_actualMove);
-        _snakeMap = mover.MoveSnake(_snakeMap);    
+
+        try
+        {
+            _snakeMap = mover.MoveSnake(_snakeMap);    
+        }
+        catch (SnakeCrashedException)
+        {  
+            _playerCrashed = true;
+        }
 
         _tracker.trackHead(_actualMove);
 
@@ -125,15 +129,5 @@ public class SnakeGame
     public void setActualMove()
     {
         _actualMove = _tracker.getLastMove();
-    }
-
-    private bool PlayerCrashed()
-    {        
-        return _snakeMap.whatIsAhead(_actualMove, _tracker.headCoord.Y, _tracker.headCoord.X) == "collition";
-    }
-
-    private void finishGame()
-    {
-        _userInterface.writeMessage($"-------------\nYOU CRASHED!\nScore: {_snakeLenght}\n-------------");
     }
 }

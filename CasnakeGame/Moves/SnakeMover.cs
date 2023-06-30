@@ -21,6 +21,7 @@ public abstract class SnakeMover
 
     public SnakeMap MoveSnake(SnakeMap gameMap)
     {
+        SnakeCrashed(gameMap);
         var fruitAhead = FruitAhead(gameMap);
 
         SnakeMap withHeadUpdated = MoveHead(gameMap);
@@ -35,6 +36,16 @@ public abstract class SnakeMover
         }
 
         return  gameMap;
+    }
+    
+    private void SnakeCrashed(SnakeMap gameMap)
+    {
+        bool playerCrashed = gameMap.map[headCeilAheadCoords.Y, headCeilAheadCoords.X] == gameComponents.BorderMap;
+
+        if (playerCrashed)
+        {
+            throw new Game.SnakeCrashedException();
+        }
     }
 
     private SnakeMap MoveHead(SnakeMap gameMap)

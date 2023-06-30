@@ -1,19 +1,19 @@
 namespace casnake.Game;
-public class SnakeMath
+public static class SnakeMath
 {
-    public int round(float val)
+    static public int round(float val)
     {
         return Convert.ToInt32(Math.Floor(val));
     }
 
-    public int randomNumberForRow(int maxIndexRow)
+    static public int randomNumberForRow(int maxIndexRow)
     {
         var randomNumber = new Random();
 
         return randomNumber.Next(1, maxIndexRow-1);
     }
     
-    public int randomNumberForColumn(int maxIndexColumn)
+    static public int randomNumberForColumn(int maxIndexColumn)
     {
         var randomNumber = new Random();
 
