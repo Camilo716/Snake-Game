@@ -7,8 +7,6 @@ namespace casnake.Tests;
 
 public class SnakeMovesTests
 {
-    SnakeUIStub _UIStub = new SnakeUIStub();
-
     const string MoveToRightExpected = 
             "********\n"+
             "*      *\n"+
