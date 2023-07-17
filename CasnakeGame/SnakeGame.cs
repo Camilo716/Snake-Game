@@ -11,7 +11,6 @@ public class SnakeGame
     private int _snakeLenght = 2;
     private ISnakeUI _userInterface;
     private IGameComponentsUI  _gameComponents;
-    private bool _playerCrashed = false;
 
     public SnakeGame(ISnakeUI _userInterface, SnakeMap _snakeMap)
     {
