@@ -39,18 +39,23 @@ public class SnakeGame
 
     private void IterateGame()
     {
-        while (!_playerCrashed)
+        while (true)
         {
             string moveToDo = _userInterface.readNextMove();
             registNextMove(moveToDo);
-
             if (!WasAValidMovement())
             {
                 _tracker.removeInvalidMovementFromRegistry();
                 continue;
             }
 
-            MakeMove();
+            SnakeMover mover = CreateMover();
+            if (mover.SnakeCrashed(_snakeMap))
+            {
+                return;
+            }
+            MakeMove(mover);
+
             _userInterface.drawGame(_snakeMap.map);
         }  
     }
@@ -77,25 +82,17 @@ public class SnakeGame
         }
     }
 
-    private void MakeMove()
+    private SnakeMover CreateMover()
     {
         var factory = new MoverFactory(_tracker.headCoord, _tracker.tailCoord);
         SnakeMover mover = factory.CreateMover(_tracker.getLastMove());
-        TryMoveSnake(mover);
-        
-        TraceMadeMove();
+        return mover;
     }
 
-    private void TryMoveSnake(SnakeMover mover)
+    private void MakeMove(SnakeMover mover)
     {
-        try
-        {
-            _snakeMap = mover.MoveSnake(_snakeMap);    
-        }
-        catch (SnakeCrashedException)
-        {  
-            _playerCrashed = true;
-        }
+        _snakeMap = mover.MoveSnake(_snakeMap);
+        TraceMadeMove();
     }
 
     private void TraceMadeMove()
