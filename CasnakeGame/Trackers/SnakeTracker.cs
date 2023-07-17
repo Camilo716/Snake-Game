@@ -2,8 +2,8 @@ namespace casnake.CasnakeGame.Trackers;
 
 public class SnakeTracker
 {
-    public Coord headCoord;
-    public Coord tailCoord;
+    public Coord headCoord = null!;
+    public Coord tailCoord = null!;
 
     private List<string> moveRegister;
  
