@@ -3,7 +3,7 @@ using casnake.CasnakeGame.Trackers;
 using casnake.Game;
 using casnake.SnakeUI;
 
-namespace casnake.Tests;
+namespace Tests;
 
 public class SnakeMovesTests
 {
@@ -26,9 +26,11 @@ public class SnakeMovesTests
             "* @    *\n"+
             "********\n";
 
-    [TestCase("right", MoveToRightExpected)]
-    [TestCase("up", MoveUpExpected)]
-    [TestCase("down", MoveDownExpected)]
+
+    [Theory]
+    [InlineData("right", MoveToRightExpected)]
+    [InlineData("down", MoveDownExpected)]
+    [InlineData("up", MoveUpExpected)]
     public void MoveSnakeTest(string direction, string mapExpected)
     {
         var mover = CreateMover(direction, new Coord(2, 2), new Coord(1, 2));
@@ -38,10 +40,10 @@ public class SnakeMovesTests
         var updatedMap = mover.MoveSnake(map);
 
         var ExpectedBidimensionalMap = ConvertStringMapToBidimensionalMap(mapExpected);
-        Assert.That(updatedMap.map, Is.EqualTo(ExpectedBidimensionalMap));
+        Assert.Equal(updatedMap.map, ExpectedBidimensionalMap);
     }
 
-    [Test]
+    [Fact]
     public void EatFruitTest()
     {
         var mover1 = CreateMover("right", new Coord(2, 2), new Coord(1, 2));
@@ -54,15 +56,14 @@ public class SnakeMovesTests
 
         var (headCount, bodyCount, borderMapCount, fruitCount) = CountCurrentGameComponents(updatedMap.map);
         int perimeter = 2*(5+8) - 4;
-        Assert.That(headCount, Is.EqualTo(1));
-        Assert.That(bodyCount, Is.EqualTo(2));
-        Assert.That(borderMapCount, Is.EqualTo(perimeter));
-        Assert.That(fruitCount, Is.EqualTo(1));
+        Assert.Equal(1, headCount);
+        Assert.Equal(2, bodyCount);
+        Assert.Equal(perimeter, borderMapCount);
+        Assert.Equal(1, fruitCount);
     }
 
     private (int headCounter, int bodyCounter,  int borderMapCounter, int fruitCounter) CountCurrentGameComponents(string[,] map)
     {
-
         int headCounter = 0;
         int bodyCounter = 0;
         int borderMapCounter = 0;
@@ -82,16 +83,12 @@ public class SnakeMovesTests
 
                 if (isHead)
                     headCounter++;
-                    
                 if (isBody)
                     bodyCounter++;
-
                 if (isBorderMap)
                     borderMapCounter++;
-
                 if (isFruit)
                     fruitCounter++;
-
             }
         }
         return (headCounter, bodyCounter, borderMapCounter, fruitCounter);
@@ -100,9 +97,7 @@ public class SnakeMovesTests
     private SnakeMover CreateMover(string direction, Coord headCoord, Coord tailCoord)
     {
         var factory = new MoverFactory(headCoord, tailCoord);
-
-        var mover = factory.CreateMover(direction);
-        
+        var mover = factory.CreateMover(direction);  
         return mover;
     }   
 
@@ -111,7 +106,6 @@ public class SnakeMovesTests
         string[] lines = mapToConvert.Split("\n");
         int rows = lines.Length -1;
         int columns = lines[0].Length;
-
 
         string[,] map = new string[rows, columns];
 
@@ -122,7 +116,6 @@ public class SnakeMovesTests
                 map[x, y] = lines[x][y].ToString();
             }
         }
-
         return map;   
     }
 }
