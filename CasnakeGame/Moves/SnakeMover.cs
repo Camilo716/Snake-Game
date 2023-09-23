@@ -23,7 +23,7 @@ public abstract class SnakeMover
     {
         var fruitAhead = FruitAhead(gameMap);
 
-        SnakeMap withHeadUpdated = MoveHead(gameMap);
+        gameMap = MoveHead(gameMap);
 
         if (fruitAhead)
         {
@@ -31,7 +31,7 @@ public abstract class SnakeMover
         }
         else
         {
-            SnakeMap withBodyUpdated = MoveBody(gameMap);
+            gameMap = MoveBody(gameMap);
         }
 
         return  gameMap;
